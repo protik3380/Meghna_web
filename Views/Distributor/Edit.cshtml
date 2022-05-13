@@ -1,0 +1,128 @@
+﻿@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model EFreshStore.Models.Context.Distributor
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css"/>
+</head>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "AddDistributorForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h2>Distributor</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Address)
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ContactPerson, "Contact Person", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ContactPerson)
+                        @Html.ValidationMessageFor(model => model.ContactPerson)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Phone)
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MasterDepotId, "Master Depot", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.MasterDepotId, new SelectList(ViewBag.masterDepot, "Id", "Name"), "---Select---", new {@id = ""})
+                        @Html.ValidationMessageFor(model => model.MasterDepotId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThanaId, "Thana", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.ThanaId, new SelectList(ViewBag.thana, "Id", "Name"), "---Select---", new { @id = "" })
+                        @Html.ValidationMessageFor(model => model.ThanaId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="Update" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+</div>
+<div style="padding-top: 100px"></div>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jqueryval")
+            <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+            <script src="~/Scripts/jquery.validate.min.js"></script>
+            <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                $("#AddDistributorForm").validate({
+                    rules: {
+
+                        Name:"required",
+                        Address: "required",
+                        Phone:"required",
+                        ContactPerson: "required",
+                        Email: "required",
+                        MasterDepotId:"required",
+                        ThanaId: "required"
+                    },
+                    messages: {
+
+                        Name: "Please select name",
+                        Address: "Please select address",
+                        Phone: "Please select phone",
+                        ContactPerson: "Please select contact person",
+                        Email: "Please select email",
+                        MasterDepotId: "Please select master depot",
+                        ThanaId: "Please select thana"
+
+                    }
+                });
+                });
+            </script>
+        }

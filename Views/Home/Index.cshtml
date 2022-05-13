@@ -1,0 +1,281 @@
+﻿@using System.Globalization
+@using EFreshStore.Models.Context;
+@using EFreshStore.Models.Enum
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@model List<ProductUnit>
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    //List<CartView> cartData = ViewBag.cart;
+    decimal discount = 0m;
+    var isLogin = false;
+    var userName = "";
+    //decimal totalAmount = 0;
+    var Total = 0.0;
+    int countItem = 0;
+    var showCartPrice = 0.0;
+    var brandID = "";
+    decimal userDiscount = 0;
+    List<CartView> cartDetails = new List<CartView>();
+    if (Session["cartView"] != null)
+    {
+        cartDetails = (List<CartView>)Session["cartView"];
+        ViewBag.cart = cartDetails;
+
+      //  countItem = cartDetails.Count;
+        Session["CountItem"] = cartDetails.Count;
+        //totalAmount = Convert.ToDecimal(cartDetails.Sum(c => c.UnitPrice).ToString());
+
+    }
+    if (Session["email"] != null)
+    {
+        var userTypeId = Convert.ToInt64(Session["userTypeId"]);
+        if (userTypeId == (long)UserTypeEnum.Corporate)
+        {
+            HttpCookie myCookie = new HttpCookie("user");
+            myCookie = Request.Cookies["user"];
+            if (myCookie == null)
+            {
+            }
+            //discount = Convert.ToDecimal(Session["discount"]);
+            //userDiscount = Convert.ToDecimal(Session["discount"]);
+
+        }
+    }
+    //decimal discountPrice = discount / 100;
+    //Session["discount"] = discount;
+    List<Brand> brands = Dropdown.Brands();
+}
+<!-- Main Slider Area -->
+<div class="main-slider-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="jtv-slideshow">
+                    <div id='rev_slider_6_wrapper' class='rev_slider_wrapper'>
+                        <div id='rev_slider_6' class='rev_slider'>
+                            <ul>
+                                <li data-transition='fade' data-slotamount="7" data-masterspeed='1000' data-thumb='~/Content/images/products/HomePageBanner1.jpg' class="black-text">
+                                    @*<img src='~/Content/images/slider/Slider-1.png' data-bgposition='left top' data-bgrepeat='no-repeat' alt="banner"/>*@
+                                    <img src='~/Content/images/products/HomePageBanner1.jpg' data-bgposition='left top' data-bgrepeat='no-repeat' alt="banner"/>
+                                    @*<div class="jtv-caption-inner jtv-left">
+                                            <div class='jtv-caption jtv-small-title' data-x='70' data-y='80' data-endspeed='500' data-speed='500' data-start='1100' data-easing='Linear.easeNone' data-splitin='none' data-splitout='none' data-elementdelay='0.1' data-endelementdelay='0.1' style='z-index:2; white-space:nowrap;'>best in quality</div>
+                                            <div class='jtv-caption jtv-large-title' data-x='70' data-y='120' data-endspeed='500' data-speed='500' data-start='1300' data-easing='Linear.easeNone' data-splitin='none' data-splitout='none' data-elementdelay='0.1' data-endelementdelay='0.1' style='z-index:3; white-space:nowrap;'>Buy 100% pure groceries for your home</div>
+                                            <div class='jtv-caption bnt-bg' data-x='70' data-y='158' data-endspeed='500' data-speed='500' data-start='1500' data-easing='Linear.easeNone' data-splitin='none' data-splitout='none' data-elementdelay='0.1' data-endelementdelay='0.1' style='z-index:4; white-space:nowrap;'><a href='#' class="jtv-shop-btn">E-Fresh Collection</a></div>
+                                        </div>*@
+                                </li>
+                                <li data-transition='random' data-slotamount="7" data-masterspeed='1000' data-thumb='~/Content/images/products/HomePageBanner2.jpg'>
+                                    <img src='~/Content/images/products/HomePageBanner2.jpg' data-bgposition='left top' data-bgfit='cover' data-bgrepeat='no-repeat' alt="banner" />
+                                </li>
+                            </ul>
+                            <div class="tp-bannertimer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-lg-3">
+                <div class="banner-jtv">
+                    <div class="banner-box">
+                        <a href="#"><img alt="" src="~/Content/images/banner.jpg"></a>
+                        <div class="banner-text"><span class="first-text">Best Watch</span> <span class="medium-text">Best then, Better now.</span></div>
+                        <a class="shop-now" href="#">Shop now</a>
+                    </div>
+                    <div class="banner-box banner-inner-box">
+                        <a href="#"><img alt="" src="~/Content/images/banner-2.jpg"></a>
+                        <div class="banner-text banner-text-mid"><span class="first-text">New Arrivals</span> <span class="medium-text">You don't want to miss!</span> </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+<!-- End Main Slider Area -->
+<!-- main container -->
+<div class="home-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!-- Home Tabs -->
+                @*<div class="tab-info">
+                        <h3 class="new-product-title pull-left">Featured Products</h3>
+                        <ul class="nav home-nav-tabs home-product-tabs">
+                            <li class="active"><a href="#all" data-toggle="tab" aria-expanded="false">Smartphones</a></li>
+                            <li> <a href="#women" data-toggle="tab" aria-expanded="false">Tablets</a> </li>
+                            <li> <a href="#men" data-toggle="tab" aria-expanded="false">Laptops</a> </li>
+                            <li> <a href="#kids" data-toggle="tab" aria-expanded="false">Accessories</a> </li>
+                        </ul>
+                         /.nav-tabs
+                    </div>*@
+                <div class="tab-info">
+                    <h3 class="new-product-title pull-left">Products</h3>
+                    <ul class="nav home-nav-tabs home-product-tabs" id="brandList">
+                        <li class="@(Session["BrandActive"] != null ? "" : "active")"><a href="#all" onclick="searchBrand(0)" id="brandName" data-toggle="tab" aria-expanded="false">All</a></li>
+                        @if (brands != null)
+                        {
+                            foreach (var brand in brands)
+                            {
+                                var className = "";
+                                if (Session["BrandActive"] != null)
+                                {
+                                    className = (long) Session["BrandActive"] == brand.Id ? "active" : "";
+                                }
+                                <li class="@className"><a href="#all" onclick="searchBrand('@brand.Id')" id="brandName" value="@brand.Name" data-toggle="tab" aria-expanded="false">@brand.Name</a></li>
+
+                            }
+                        }
+                    </ul>
+
+                </div>
+                <div id="productTabContent" class="tab-content">
+
+                    <div class="tab-pane active in" id="all">
+                        <div id="loadingGif">
+                            <img src="~/Content/images/products/loading.gif" />
+                        </div>
+
+                        @foreach (var product in Model)
+                        {
+                            var wishListActive = product.ExistsInWishList ? "in-wishlist" : "";
+                            var productImage = product.ProductImages.FirstOrDefault();
+                            var imageLocation = productImage == null ? "Content/img/product/NoProductImage.png" : productImage.ImageLocation;
+                            <input type="hidden" id="pUnitId_@product.Id" value="@product.Id" />
+                            <input type="hidden" id="pTypeId_@product.Id" value="@product.Product.Category.ProductTypeId" />
+                            <input type="hidden" id="pUnit_@product.Id" value="@product.StockKeepingUnit" />
+                            <input type="hidden" id="pTypeId_@product.Id" value="@product.Product.Category.ProductTypeId" />
+                            <input type="hidden" id="pName_@product.Id" value="@product.Product.Name" />
+                            <input type="hidden" id="brandName_@product.Id" value="@product.Product.Brand.Name" />
+                            <input type="hidden" id="categoryName_@product.Id" value="@product.Product.Category.Name" />
+                            <input type="hidden" id="pImage_@product.Id" value="@imageLocation" />
+                            <input type="hidden" id="distributorPrice_@product.Id" value="@product.DistributorPricePerCarton" />
+                            <input type="hidden" id="unitPriceWithoutDiscount_@product.Id" value="@product.MaximumRetailPrice" />
+                            <div class="product-item col-md-3 col-sm-6" id="divProduct">
+                                <div class="item-inner" id="productContent">
+                                    <div class="product-thumbnail">
+                                        <div class="box-hover">
+                                            <div class="add-to-links" data-role="add-to-links">
+                                                <div class="btn-quickview"> <a href="#" data-toggle="modal" data-target="#modal-quickview" onclick="QuickView(@product.Id)"><i class="fa fa-search-plus" aria-hidden="true"></i> Quick View</a> </div>
+                                                @*<a onclick="addOrRemoveFromWishList(@product.Id)" role="button" class="action add-to-wishlist @wishListActive" title="Add to Wish List"></a>*@
+                                                
+                                                    <div class="wishlist-wrapper">
+                                                        <a onclick="addOrRemoveFromWishList(@product.Id)" role="button" class="" title="Add to Wish List">
+                                                            <div id="icon-wishlist_@product.Id" class="icon-wishlist @wishListActive"></div>
+                                                        </a>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        @if (productImage != null)
+                                        {
+                                            <a href="@Url.Action("Details", "Product", new {ProductId = @product.Id})" class="product-item-photo"><img src="@BaseUrl.baseUrl\@productImage.ImageLocation" alt="product"></a>
+
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Details", "Product", new {ProductId = @product.Id})" class="product-item-photo"><img src="~/Content/images/products/NoProductImage.png" alt="picture" /></a>
+                                        }
+                                    </div>
+                                    <div class="pro-box-info">
+                                        <div class="item-info">
+                                            <div class="info-inner">
+                                                <div class="item-title">
+                                                    <a title="@product.Product.Name" href="@Url.Action("Details", "Product", new {ProductId = @product.Id})">@product.Product.Name</a>
+                                                </div>
+                                                <div class="item-content">
+                                                    <div class="rating">
+                                                        <span class="stars">@product.AverageRating</span>
+
+                                                        <a style="font-size: 14px">@product.StockKeepingUnit</a>
+                                                    </div>
+                                                    <div class="item-price">
+                                                        @if (product.PorductDiscountPrice != null)
+                                                        {
+                                                            <input type="hidden" id="unitPrice_@product.Id" value="@product.PorductDiscountPrice" />
+                                                            <div class="price-box">
+                                                                <p class="special-price"> <span class="price-label">Special Price</span> <span class="price"> &#2547;  @Convert.ToDecimal(@product.PorductDiscountPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                                                <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> &#2547; @Convert.ToDecimal(@product.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="price-box">
+                                                                <p class="special-price"> <span class="price-label">Special Price</span> <span class="price"> &#2547; @Convert.ToDecimal(@product.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                                            </div>
+                                                            <input type="hidden" id="unitPrice_@product.Id" value="@product.MaximumRetailPrice" />
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-hover">
+                                            <div class="product-item-actions">
+                                                <div class="pro-actions">
+                                                    <button onclick="addtoCart(@product.Id)" class="action add-to-cart" type="button" title="Add to Cart"> <span>Add to Cart</span> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Newsletter Popup Start -->
+@*<div id="myModal" class="modal fade">
+        <div class="modal-dialog newsletter-popup">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <div class="modal-body">
+                    <h2 class="modal-title">E-Fresh Store</h2>
+                    <form id="newsletter-form" method="post" action="#">
+                        <div class="content-subscribe">
+                            <div class="form-subscribe-header">
+                                <label>Subscribe to the E-Fresh newsletter to get all new products and all new discounts.</label>
+                            </div>
+                            <div class="input-box">
+                                <input type="text" class="input-text newsletter-subscribe" title="Sign up for our newsletter" name="email" placeholder="Enter your email address">
+                            </div>
+                            <div class="actions">
+                                <button class="button-subscribe" title="Subscribe" type="submit">Subscribe</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="subscribe-bottom">
+                        <input name="notshowpopup" id="notshowpopup" type="checkbox">
+                        Don’t show this popup again
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!--End of Newsletter Popup-->
+<script>
+    $(document).ready(function() {
+        $(".nav li").removeClass("active");
+        $('#home').addClass('active');
+    });
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function plusDivs(n) {
+        showDivs(slideIndex += n);
+    }
+
+    function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        if (n > x.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = x.length }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        x[slideIndex - 1].style.display = "block";
+    }
+
+</script>

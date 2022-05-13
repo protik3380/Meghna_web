@@ -1,0 +1,350 @@
+﻿@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+@using System
+@using System.Collections.Generic
+@using System.Globalization
+@using EFreshStore.Models
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.Enum
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+﻿@using EFreshStore.Models.Context
+
+@{
+    var MGIUserTypeId = Convert.ToInt64(UserTypeEnum.MeghnaUser);
+    Session["MGITypeId"] = UserTypeEnum.MeghnaUser;
+    double realPrice = 0.0;
+    var showCartPrice = 0.0;
+    var total = 0.0;
+    var isLogin = false;
+    var userName = "";
+    int countItem = 0;
+    var row = 0;
+    long userTypeId = 0;
+    long userId = 0;
+    decimal userDiscount = 0;
+    decimal totalAmount = 0;
+    //var totalUpdatePrice;
+    //var finalCouponDiscount;
+    List<CartView>
+    cartDetails = new List<CartView>();
+    if (Session["cartView"] != null)
+    {
+        cartDetails = (List<CartView>)Session["cartView"];
+        countItem = cartDetails.Count;
+        //totalAmount = cartDetails.Sum(c => c.Price).ToString();
+    }
+    if (Session["email"] != null)
+    {
+        isLogin = true;
+        userName = Session["email"].ToString();
+        userId = Convert.ToInt64(Session["UserId"]);
+        userTypeId = Convert.ToInt64(Session["userTypeId"]);
+        //userDiscount = Convert.ToDecimal(Session["discount"]);
+    }
+}
+<div id="page">
+    <!-- Breadcrumbs start -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul>
+                        <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                        <li><strong>Cart</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+    <!-- Main Container -->
+    <section class="main-container col1-layout">
+        <div class="main container">
+            <div class="col-main">
+                <div class="cart">
+
+                    <div class="page-content page-order">
+                        <div class="page-title">
+                            <h2>Shopping Cart</h2>
+                        </div>
+
+                        <div class="order-detail-content">
+                            <div class="table-responsive">
+                                <table class="table cart_summary">
+                                    <thead>
+                                        <tr>
+                                            <th class="cart_product">Product</th>
+                                            <th>Description</th>
+                                            <th class="text-center">Unit price</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="action"><i class="fa fa-trash-o"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cartTableItems">
+                                        @foreach (var item in cartDetails)
+                                        {
+
+                                            realPrice = item.Price;
+                                            totalAmount += Convert.ToDecimal(realPrice);
+                                            total = total + realPrice;
+                                            //var unitPrice = Convert.ToDecimal((realPrice / item.Quantity)).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                            //var totalUnitPrice = Convert.ToDecimal(realPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+
+                                            <tr>
+                                                <td class="cart_product">
+
+                                                    <input type="hidden" id="cRow" value="@(row += 1)" />
+                                                    <input type="hidden" id="pName_@row" value="@item.ProductName" />
+                                                    <input type="hidden" id="pImage_@row" value="@item.ProductImage" />
+                                                    <input type="hidden" id="pUnitId_@row" value="@item.ProductUnitId" />
+                                                    
+                                                    @if (userTypeId == (long)UserTypeEnum.MeghnaUser)
+                                                    {
+                                                        <input type="hidden" id="pUnitPrice_@row" value="@item.Price" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="hidden" id="pUnitPrice_@row" value="@item.UnitPrice" />
+                                                        <input type="hidden" id="dPrice_@row" value="@item.Price" />
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(item.ProductImage))
+                                                    {
+
+                                                        <a href="@BaseUrl.homeUrl/Product/Details/@item.ProductUnitId" target="_blank"><img src="@BaseUrl.baseUrl/@item.ProductImage" alt="Product"></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#"><img src="@BaseUrl.baseUrl/Content/img/product/NoProductImage.png" alt="Product"></a>
+                                                    }
+                                                </td>
+                                                <td class="cart_description">
+                                                    <p class="product-name">
+                                                        <a href="@BaseUrl.homeUrl/Product/Details/@item.ProductUnitId" target="_blank"
+                                                           style="color: #2174a9; font-weight: bold">
+                                                            @item.ProductName
+                                                        </a>
+                                                    </p>
+                                                    <p class="product-name"><a>@item.ProductUnit</a></p>
+                                                    <p class="product-name"><a>Brand - @item.Brand</a></p>
+
+                                                    <p class="product-name"><a>Category - @item.Category</a></p>
+                                                </td>
+
+                                                <td class="price"><span id="unitPrice_@row" data-unit-price="@Convert.ToDecimal((item.Price / item.Quantity)).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))" style="color:#2174a9">৳ @Convert.ToDecimal((item.Price / item.Quantity)).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span></td>
+                                                <td class="qty">
+                                                    <input class="form-control input-sm cartTextInput input-number" data-old-value="@item.Quantity" type="number" value="@item.Quantity" onchange="UpdateQty($(this), @userTypeId, @MGIUserTypeId)" data-row-id="@row" id="pQty_@row" step="1" min="1" max="" name="quantity">
+                                                </td>
+                                                <td class="price"><span id="totalUnitPrice_@row" style="color:#2174a9">৳ @Convert.ToDecimal(item.Price).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span></td>
+                                                <td class="action"><a onclick="DeleteItemFromCart($(this), @userTypeId, @MGIUserTypeId)" data-row-id="@row" style="cursor: pointer"><i class="icon-close"></i></a></td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="first last">
+                                            <td colspan="50" class="a-right last">
+                                                <button type="button" title="Continue Shopping" class="button btn-continue" onclick="location.href = '../home/index'"><span>Continue Shopping</span></button>
+                                                <button type="submit" onclick="ClearAllCartItems()" name="update_cart_action" value="empty_cart" title="Clear Cart" class="button btn-empty" id="empty_cart_button"><span>Clear Cart</span></button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="cart-collaterals row">
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                @{
+                                    decimal x = Convert.ToDecimal(total - (double)totalAmount);
+                                    string totalDiscount = x.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                    string subTotal = total.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                    string grandTotal = Convert.ToDecimal(totalAmount).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                    Session["Subtotal"] = total;
+                                    Session["Discount"] = totalDiscount;
+                                    Session["GrandTotal"] = totalAmount;
+                                    var totalUpdatePrice = "";
+                                    string finalCouponDiscount = "0.0";
+                                    if (Session["totalUpdatePrice"] != null)
+                                    {
+                                        totalUpdatePrice = Convert.ToDecimal(Session["totalUpdatePrice"]).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+
+                                    }
+                                    if (Session["finalCouponDiscount"] != null)
+                                    {
+                                        finalCouponDiscount = Convert.ToDecimal(Session["finalCouponDiscount"]).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                    }
+                                }
+                                @if (isLogin)
+                                {
+                                    <div class="discount">
+                                        <h3>Discount Codes</h3>
+                                        <form id="discount-coupon-form" action="" method="post">
+                                            <label for="coupon_code">Enter your coupon code if you have one.</label>
+                                            <input type="text" class="input-text fullwidth" id="coupon_code" name="coupon_code">
+                                            <span style="display: block;" id="coupon-validate-message"></span>
+                                            <input type="hidden" name="userTypeId" id="userTypeId" value="@userTypeId">
+                                            <input type="hidden" name="totalAmount" id="totalAmount" value="@totalAmount">
+                                            <input type="hidden" name="totalDiscount" id="totalDiscount" value="@x">
+                                            @*<div id="cupon-validate-message"></div>*@
+                                            <button title="Apply Coupon" type="submit" class="button coupon" value="Apply Coupon"><span>Apply Coupon</span></button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                            <div class="totals col-sm-4">
+                                <h3>Shopping Cart Total</h3>
+                                <div class="inner">
+                                    <table id="shopping-cart-totals-table" class="table shopping-cart-table-total">
+                                        <colgroup>
+                                            <col>
+                                            <col width="1">
+                                        </colgroup>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="" class="a-left" colspan="1"><b style="font-size: 14.5px;">Grand Total</b></td>
+                                                <td style="" class="a-right">
+                                                    <strong>
+                                                        <span class="price" id="cartGrandTotal">
+                                                            ৳
+                                                            @if (totalUpdatePrice != "")
+                                                            {
+                                                                @totalUpdatePrice
+                                                            }
+                                                            else
+                                                            {
+                                                                @grandTotal
+                                                            }
+                                                        </span>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <tr>
+                                                <td style="" class="a-left" colspan="1"> Subtotal </td>
+                                                <td style="" class="a-right"><span class="price" id="cartSubTotal">৳ @grandTotal</span></td>
+                                            </tr>
+                                            <tr id="discountRow">
+                                                <td style="" class="a-left" colspan="1"> Discount Amount</td>
+                                                <td style="" class="a-right"><span class="price" id="discountAmount">৳ @finalCouponDiscount</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <ul class="checkout">
+                                        <li>
+                                            <button type="button" onclick="location.href = '../order/checkout'" title="Proceed to Checkout" class="button btn-proceed-checkout"><span>Proceed to Checkout</span></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--inner-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section scripts{
+<script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $('#loginFloatBox').hide();
+        var unit = $('#ss').val();
+        var total;
+        var discountAmount;
+        var totalUpdatePrice = 0.0;
+        var finalCouponDiscount = 0.0;
+        var couponCode = "";
+        $(".cartTextInput").keydown(function(e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105))) {
+                e.preventDefault();
+            }
+        });
+
+        $("#discount-coupon-form").validate({
+            errorPlacement: function(error, element) {
+                error.appendTo('#coupon-validate-message');
+            },
+            rules: {
+                coupon_code: {
+                    required: true
+                }
+            },
+            messages: {
+                coupon_code: {
+                    required: "Please enter your coupon"
+                }
+            },
+            submitHandler: function(form, e) {
+                e.preventDefault();
+                couponCode = $("#coupon_code").val();
+                var userTypeId = $("#userTypeId").val();
+                var input = { couponCode: couponCode, userTypeId: userTypeId };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckValidity", "Coupon")',
+                    data: JSON.stringify(input),
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function(data) {
+                        toastr.clear();
+                        if (data.status == "Ok") {
+                            $('#subTotalInCart').empty();
+                            $('#subTotal').empty();
+                            var total = parseFloat(data.couponDiscountFromApi.TotalUpdatedPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            $('#subTotal').append('৳ ' + total);
+                            $('#subTotalInCart').append('৳ ' + total);
+                            $('#shopping-cart-totals-table').empty();
+                            $('#shopping-cart-totals-table').append(
+                                ' <colgroup><col><col width="1"></colgroup><tfoot><tr><td style="" class="a-left" colspan="1"><b style="font-size: 14.5px;">Grand Total</b></td><td style="" class="a-right"><strong><span class="price" id="cartGrandTotal">৳ ' +
+                                parseFloat(data.couponDiscountFromApi.TotalUpdatedPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                '</span></strong></td></tr></tfoot><tbody><tr><td style="" class="a-left" colspan="1"> Subtotal </td><td style="" class="a-right"><span class="price" id="cartSubTotal">৳ ' +
+                                parseFloat(data.couponDiscountFromApi.GrandTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                '</span></td></tr><tr id="discountRow"><td style="" class="a-left" colspan="1"> Discount Amount</td><td style="" class="a-right"><span class="price" id="discountAmount">৳ ' +
+                                parseFloat(data.couponDiscountFromApi.FinalCouponDiscount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                '</span></td></tr></tbody>');
+
+                            toastr.success("Coupon code applied!!");
+                        } else if (data.status == "NotFound") {
+                            toastr.error("Invalid Coupon Code !!");
+                        } else if (data.status == "BadRequest") {
+                            toastr.error(data.message);
+                        } else {
+                            toastr.error("Something went wrong!");
+                        }
+                    },
+                    error: function() {
+                        toastr.error("Something went wrong!");
+                    }
+                });
+                return false;
+            }
+        });
+
+        function ClearSessionData() {
+            $(function() {
+                $.post('/Coupon/ClearSession',
+                    function(data) {
+                    });
+            });
+        }
+    </script>
+}
+
+

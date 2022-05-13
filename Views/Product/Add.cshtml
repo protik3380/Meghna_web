@@ -1,0 +1,135 @@
+﻿@using EFreshStore.Models.Context;
+@model Product
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+@section style{
+    <style>
+       legend {
+  display: block;
+  padding-left: 2px;
+  padding-right: 2px;
+  border: none;
+}
+    </style>
+}
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <link  href="~/Content/css/form-design.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="form-horizontal" id="div1">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "productform" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <h2>Add new product</h2>
+                    <hr />
+                    @Html.ValidationSummary(true)
+                    <h4 class="text-center">@ViewBag.message</h4>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, "Product Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            
+                            @Html.TextBoxFor(model => model.Name, new { placeholder = "Enter product name" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, "Description", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Description, new { placeholder = "Enter produt description" })
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryId,"Category", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                          @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.category, "Id", "Name"), "---Select---", new { @id = "" })
+                            @Html.ValidationMessageFor(model => model.CategoryId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BrandId,"Brand", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.BrandId,new SelectList(ViewBag.brand,"Id","Name"),"---Select---", new { @id= "" })
+                            @Html.ValidationMessageFor(model => model.BrandId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-4 col-md-8">
+                            <input type="submit" id="submit" value="Create" class="btn btn-default" />
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @section scripts{
+    
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>  
+        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>      
+        <script>
+            $(document).ready(function () {
+                //LoadCategory();
+            $("#productform").validate({
+                rules: {
+                    Name: "required",
+                    Description: "required",
+                    CategoryId: "required",
+                    BrandId: "required"
+                },
+                messages: {
+                    Name: "Please enter product name",
+                    Description: "Please enter description",
+                    CategoryId: "Please select category",
+                    BrandId: "Please select brand"
+                }
+            });
+
+           
+        });
+        //function LoadCategory() {
+
+        //    $.ajax({
+        //        type: "GET",
+        //        url: 'http://localhost:50644/api/Categories/GetAllCategories',
+        //        dataType: "json",
+        //        headers: {
+        //            "Content-Type": "application/json"
+ 
+        //        },
+        //        contentType: "application/json; charset=utf-8",
+        //        crossDomain :true,
+        //        success: function (data) {
+        //            $.each(data, function (key, value) {
+        //                alert(key);
+        //                //alert(value.Name);
+        //                var content = "<option value=" + value.Id + ">" + value.Name + "</option>";
+        //                $("#CategoryId").append(content);
+        //            });
+        //        }
+
+        //    });
+
+        //}
+        </script>
+    }
+</body>
+</html>

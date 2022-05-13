@@ -1,0 +1,96 @@
+﻿@model EFreshStore.Models.Context.Product
+@using Vereyon.Web
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "productform" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h2>Edit Product</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.CreatedOn)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, "Name", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.Description)
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CategoryId, "Category", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.category, "Id", "Name"), "---Select---", new { @id = "" })
+                        @Html.ValidationMessageFor(model => model.CategoryId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BrandId, "Brand", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.BrandId, new SelectList(ViewBag.brand, "Id", "Name"), "---Select---", new { @id = "" })
+                        @Html.ValidationMessageFor(model => model.BrandId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" value="Update" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div style="margin-left: 50px; color: red">
+            @Html.ActionLink("Back to List", "Views", "", htmlAttributes: new {@style = "color: red"})
+        </div>
+    </div>
+</div>
+
+    @section scripts{
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+        <script>
+        $(document).ready(function () {
+            $("#productform").validate({
+                rules: {
+                    Name: "required",
+                    Description: "required",
+                    CategoryId: "required",
+                    BrandId: "required"
+                },
+                messages: {
+                    Name: "Please enter product name",
+                    Description: "Please enter description",
+                    CategoryId: "Please select category",
+                    BrandId: "Please select brand"
+                }
+            });
+        });
+        </script>
+    }
+</body>
+</html>

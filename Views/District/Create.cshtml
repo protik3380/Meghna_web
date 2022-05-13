@@ -1,0 +1,71 @@
+﻿@using System.Web.Mvc.Html
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model EFreshStore.Models.Context.District
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    
+}
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css" />
+</head>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "AddDistrictForm"}))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h2>District</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, "District", htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Name, new {placeholder = "Enter district"})
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+        <div style="margin-left: 50px;">
+            @Html.ActionLink("Back to List", "Views", "", htmlAttributes: new {@style = "color: red"})
+        </div>
+    </div>
+</div>
+<div style="padding-top: 100px"></div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+            $(document).ready(function() {
+                $("#AddDistrictForm").validate({
+                    rules: {
+                        Name: "required"
+                    },
+                    messages: {
+                        Name: "Please insert district name"
+
+                    }
+                });
+                });
+    </script>
+}

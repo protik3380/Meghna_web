@@ -1,0 +1,57 @@
+﻿@using System.Web.Mvc.Html
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.Brand>
+
+@{
+    ViewBag.Title = "Views";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    List<Brand> brands = ViewBag.Brands;
+
+}
+
+<div class="chart-area">
+    <div class="container">
+        @Html.RenderFlashMessages()
+        <h2>Brand Details</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Brand</th>
+                                        <th>Description</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                
+                                @if (Model != null)
+                                {
+                                    foreach (var brand in Model)
+                                     {
+                                         <tr>
+                                             <td>@brand.Name</td>
+                                             <td>@brand.Description</td>
+                                             <td>
+                                                 @Html.ActionLink("Edit", "Edit", new {id = brand.Id}, htmlAttributes: new {@style = "color: red"})
+                                             </td>
+                                         </tr>
+                                     }
+                                }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

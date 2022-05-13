@@ -1,0 +1,41 @@
+﻿@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.ProductLineDetail>
+
+@{
+    ViewBag.Title = "Product Line Detail";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    //List<ProductLine> categories = ViewBag.categories;
+}
+
+<div class="container">
+    <h2>View</h2>
+    @Html.RenderFlashMessages()
+    <hr />
+    <h4>Product Line Details</h4>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr style="color: black">
+            <td>Product</td>
+            <td>Product Line</td>
+            <td>Edit</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var productLine in Model)
+        {
+            <tr style="color: black;">
+                <td>@productLine.Product.Name</td>
+                <td>@productLine.ProductLine.Name</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditDetail", new { id = productLine.Id }, htmlAttributes: new { @style = "color: red" })
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <hr />
+</div>
+
+

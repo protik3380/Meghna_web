@@ -1,0 +1,121 @@
+﻿@model EFreshStore.Models.Context.MeghnaUser
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                    <li><strong>My Profile</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="my-account" align="center">
+                    @if (@Html.RenderFlashMessages() != null && @Html.RenderFlashMessages().ToHtmlString() != "")
+                    {
+                        <div id="mgs">
+                            <div class="alert" id="alertMessage">
+                                <strong>@Html.RenderFlashMessages()</strong> .
+                            </div>
+                        </div>
+                    }
+                    <div class="page-title">
+                       
+                        <h2>
+                            My Profile &nbsp;&nbsp;&nbsp;&nbsp;<a href="@Url.Action("EditProfile", "Contract")" style="background: #d3d3d3; border-radius: 50%; padding: 2px 8px"><i class="material-icons" style="font-size: 16px"> border_color</i></a>
+                        </h2>
+                    </div>
+                    <div class="wishlist-item" style="width: 40%; text-align: left" align="center">
+                        <table class="col-md-12">
+                            <tbody>
+                            <tr>
+
+                                <td class="th-details" style="padding:0 0 0 5px; width: 80%; text-align: left">
+                                    <h2>
+                                        <a><i class="fa fa-user" style="font-size: 20px"></i>&nbsp;&nbsp;@Model.Name</a>
+                                    </h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="th-details" style="padding:0; width: 80%; text-align: left;">
+                                    <h2>
+                                        @if (Model.MeghnaDesignation != null)
+                                        {
+                                            <a><img src="~/Content/images/icon/designation.png" style="height: 22px; width: 22px" /> &nbsp;&nbsp; @Model.MeghnaDesignation.Name</a>
+                                        }
+                                        else
+                                        {
+                                            <a><img src="~/Content/images/icon/designation.png" style="height: 22px; width: 22px" /> &nbsp;&nbsp;</a>
+                                        }
+                                    </h2>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="th-details" style="padding:0; width: 80%; text-align: left;">
+                                        <h2>
+                                            @if (Model.MeghnaDepartment != null)
+                                            {
+                                                <a><img src="~/Content/images/icon/department.png" style="height: 22px; width: 22px" /> &nbsp;&nbsp; @Model.MeghnaDepartment.Name</a>
+                                            }
+                                            else
+                                            {
+                                                <a><img src="~/Content/images/icon/department.png" style="height: 22px; width: 22px" /> &nbsp;&nbsp;</a>
+                                            }
+                                        </h2>
+                                    </td>
+                                </tr>
+                            <tr>
+                                <td class="th-details" style="padding:0 0 0 5px; width: 80%; text-align: left">
+                                    <h2>
+                                        <a><i class="fa fa-mobile-phone" style="font-size: 24px;"></i>&nbsp;&nbsp;&nbsp;@Model.MobileNo</a>
+                                    </h2>
+                                    <h2>
+                                        <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.AlternativeMobileNo</a>
+                                   </h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="th-details" style="padding:0 0 0 5px; width: 80%; text-align: left">
+                                    <h2>
+                                        <a><i class="fa fa-envelope" style="font-size: 18px"></i>&nbsp;&nbsp;@Model.Email</a>
+                                    </h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="th-details" style="padding:0 0 0 5px; width: 80%; text-align: left">
+                                    <h2>
+                                        <a><i class="fa fa-home" style="font-size: 22px;"></i>&nbsp;&nbsp;@Model.DeliveryAddress1</a>
+                                    </h2>
+                                </td>
+                            </tr>
+  <tr>
+                            <td class="th-details" style="padding:0 0 0 5px; width: 80%; text-align: left">
+                                    <h2>
+                                        <a><i class="fa fa-home" style="font-size: 22px;"></i>&nbsp;&nbsp;@Model.DeliveryAddress2</a>
+                                    </h2>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <div align="center">
+                            <a href="@Url.Action("ChangePassword", "Home")" id="changePasswordLink" class="all-cart">Change Password</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

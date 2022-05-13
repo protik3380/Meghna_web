@@ -1,0 +1,835 @@
+﻿@using System.Globalization
+@using EFreshStore.Models
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@model EFreshStore.Models.Context.Order
+@{
+    decimal totalPrice = 0;
+    var realPrice = 0.0;
+    var showCartPrice = 0.0;
+    var Total = 0.0;
+    var isLogin = false;
+    var userName = "";
+    int countItem = 0;
+    var row = 0;
+    decimal userDiscount = 0;
+    decimal totalAmount = 0;
+    List<CartView>
+    cartDetails = new List<CartView>
+        ();
+        if (Session["cartView"] != null)
+        {
+        cartDetails = (List<CartView>
+            )Session["cartView"];
+            countItem = cartDetails.Count;
+            //totalAmount = cartDetails.Sum(c => c.Price).ToString();
+            }
+
+            if (Session["email"] != null)
+            {
+            isLogin = true;
+            userName = Session["email"].ToString();
+            userDiscount = Convert.ToDecimal(Session["discount"]);
+            }
+            var user = ViewBag.User;
+
+}
+          <!-- Breadcrumbs-->
+            <div class="breadcrumbs">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <ul>
+                                <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                                <li><strong>Checkout</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Breadcrumbs End -->
+            <!-- Main Container -->
+            <section class="main-container col2-right-layout">
+                <div class="main container">
+                    <div class="row">
+                        <div class="col-main col-sm-9 col-xs-12">
+
+
+                            <div class="page-content checkout-page">
+                                <div class="page-title">
+                                    <h2>Checkout</h2>
+                                </div>
+                                <h4 class="checkout-sep">1. Checkout Method</h4>
+                                <div class="box-border">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h5>Checkout as a Guest or Register</h5>
+                                            <p>Register with us for future convenience:</p>
+                                            <ul>
+                                                @*<button id="search">Search</button>*@
+                                                <li><label><input type="radio" name="radio1" id="radio1" value="guest">Checkout as Guest</label></li>
+                                                <li><label><input type="radio" name="radio1" id="radio1" value="register">Register</label></li>
+                                                <li><label><input type="radio" name="radio1" id="radio1" value="login">Login</label></li>
+                                            </ul>
+                                            <br>
+                                            <button class="button" id="continue-button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h4>Register and save time!</h4>
+                                            <p>Register with us for future convenience:</p>
+                                            <p><i class="fa fa-check-circle text-primary"></i> Fast and easy check out</p>
+                                            <p><i class="fa fa-check-circle text-primary"></i> Easy access to your order history and status</p>
+                                            @*@using (Html.BeginForm("Login", "Home", null, FormMethod.Post, new {id = "loginForm"}))
+                                            {
+                                                <h5>Login</h5>
+                                                <p>Already registered? Please log in below:</p>
+                                                <label>Email address</label>
+                                                <input class="form-control" type="text" id="Email" name="Email" placeholder="Enter email address"><br/>
+                                                <label>Password</label>
+                                                 <input class="input form-control" type="password" id="Password" name="Password" placeholder="Enter password">
+                                                <p>
+                                                    <a href="@Url.Action("ForgotPassword","Home")">Forgot your password?</a>
+                                                </p>
+                                                <button class="button" type="submit"><i class="icon-login"></i>&nbsp; <span>Login</span></button>
+                                            }*@
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <h4 class="checkout-sep">2. Billing Information</h4>
+                                <div class="box-border" style="display:none;">
+                                    <ul>
+                                        <li class="row">
+                                            <div class="col-sm-6">
+                                                <label for="first_name" class="required">First Name</label>
+                                                <input type="text" class="input form-control" name="" id="first_name">
+                                            </div><!--/ [col] -->
+                                            <div class="col-sm-6">
+                                                <label for="last_name" class="required">Last Name</label>
+                                                <input type="text" name="" class="input form-control" id="last_name">
+                                            </div><!--/ [col] -->
+                                        </li><!--/ .row -->
+                                        <li class="row">
+                                            <div class="col-sm-6">
+                                                <label for="company_name">Company Name</label>
+                                                <input type="text" name="" class="input form-control" id="company_name">
+                                            </div><!--/ [col] -->
+                                            <div class="col-sm-6">
+                                                <label for="email_address" class="required">Email Address</label>
+                                                <input type="text" class="input form-control" name="" id="email_address">
+                                            </div><!--/ [col] -->
+                                        </li><!--/ .row -->
+                                        <li class="row">
+                                            <div class="col-xs-12">
+
+                                                <label for="address" class="required">Address</label>
+                                                <input type="text" class="input form-control" name="" id="address">
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!-- / .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="city" class="required">City</label>
+                                                <input class="input form-control" type="text" name="" id="city">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+                                                <label class="required">State/Province</label>
+                                                <select class="input form-control" name="">
+                                                    <option value="Alabama">Alabama</option>
+                                                    <option value="Illinois">Illinois</option>
+                                                    <option value="Kansas">Kansas</option>
+                                                </select>
+                                            </div><!--/ [col] -->
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="postal_code" class="required">Zip/Postal Code</label>
+                                                <input class="input form-control" type="text" name="" id="postal_code">
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+                                                <label class="required">Country</label>
+                                                <select class="input form-control" name="">
+                                                    <option value="USA">USA</option>
+                                                    <option value="Australia">Australia</option>
+                                                    <option value="Austria">Austria</option>
+                                                    <option value="Argentina">Argentina</option>
+                                                    <option value="Canada">Canada</option>
+                                                </select>
+                                            </div><!--/ [col] -->
+                                        </li><!--/ .row -->
+                                        <li class="row">
+                                            <div class="col-sm-6">
+                                                <label for="telephone" class="required">Telephone</label>
+                                                <input class="input form-control" type="text" name="" id="telephone">
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+                                                <label for="fax">Fax</label>
+                                                <input class="input form-control" type="text" name="" id="fax">
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+                                            <div class="col-sm-6">
+                                                <label for="password" class="required">Password</label>
+                                                <input class="input form-control" type="password" name="" id="password">
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+                                                <label for="confirm" class="required">Confirm Password</label>
+                                                <input class="input form-control" type="password" name="" id="confirm">
+                                            </div><!--/ [col] -->
+                                        </li><!--/ .row -->
+                                        <li>
+                                            <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <h4 class="checkout-sep">3. Shipping Information</h4>
+                                <div class="box-border" style="display:none;">
+                                    <ul>
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="first_name_1" class="required">First Name</label>
+                                                <input class="input form-control" type="text" name="" id="first_name_1">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+
+                                                <label for="last_name_1" class="required">Last Name</label>
+                                                <input class="input form-control" type="text" name="" id="last_name_1">
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="company_name_1">Company Name</label>
+                                                <input class="input form-control" type="text" name="" id="company_name_1">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+
+                                                <label for="email_address_1" class="required">Email Address</label>
+                                                <input class="input form-control" type="text" name="" id="email_address_1">
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-xs-12">
+
+                                                <label for="address_1" class="required">Address</label>
+                                                <input class="input form-control" type="text" name="" id="address_1">
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="city_1" class="required">City</label>
+                                                <input class="input form-control" type="text" name="" id="city_1">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+
+                                                <label class="required">State/Province</label>
+
+                                                <div class="custom_select">
+
+                                                    <select class="input form-control" name="">
+
+                                                        <option value="Alabama">Alabama</option>
+                                                        <option value="Illinois">Illinois</option>
+                                                        <option value="Kansas">Kansas</option>
+
+                                                    </select>
+
+                                                </div>
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="postal_code_1" class="required">Zip/Postal Code</label>
+                                                <input class="input form-control" type="text" name="" id="postal_code_1">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+
+                                                <label class="required">Country</label>
+
+                                                <div class="custom_select">
+
+                                                    <select class="input form-control" name="">
+
+                                                        <option value="USA">USA</option>
+                                                        <option value="Australia">Australia</option>
+                                                        <option value="Austria">Austria</option>
+                                                        <option value="Argentina">Argentina</option>
+                                                        <option value="Canada">Canada</option>
+
+                                                    </select>
+
+                                                </div>
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                        <li class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <label for="telephone_1" class="required">Telephone</label>
+                                                <input class="input form-control" type="text" name="" id="telephone_1">
+
+                                            </div><!--/ [col] -->
+
+                                            <div class="col-sm-6">
+
+                                                <label for="fax_1">Fax</label>
+                                                <input class="input form-control" type="text" name="" id="fax_1">
+
+                                            </div><!--/ [col] -->
+
+                                        </li><!--/ .row -->
+
+                                    </ul>
+                                    <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                                </div>
+                                <h4 class="checkout-sep">4. Shipping Method</h4>
+                                <div class="box-border" style="display:none;">
+                                    <ul class="shipping_method">
+                                        <li>
+                                            <p class="subcaption bold">Free Shipping</p>
+                                            <label for="radio_button_3"><input type="radio" checked name="radio_3" id="radio_button_3">Free $0</label>
+                                        </li>
+
+                                        <li>
+                                            <p class="subcaption bold">Free Shipping</p>
+                                            <label for="radio_button_4"><input type="radio" name="radio_3" id="radio_button_4"> Standard Shipping $5.00</label>
+                                        </li>
+                                    </ul>
+                                    <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                                </div>
+                                <h4 class="checkout-sep">5. Payment Information</h4>
+                                <div class="box-border" style="display:none;">
+                                    <ul>
+                                        <li>
+                                            <label for="radio_button_5"><input type="radio" checked name="radio_4" id="radio_button_5"> Check / Money order</label>
+                                        </li>
+
+                                        <li>
+
+                                            <label for="radio_button_6"><input type="radio" name="radio_4" id="radio_button_6"> Credit card (saved)</label>
+                                        </li>
+
+                                    </ul>
+                                    <button class="button"><i class="fa fa-angle-double-right"></i>&nbsp; <span>Continue</span></button>
+                                </div>
+                                <h4 class="checkout-sep last">6. Order Review</h4>
+                                <div class="box-border" style="display:none;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered cart_summary">
+                                            <thead>
+                                                <tr>
+                                                    <th class="cart_product">Product</th>
+                                                    <th>Description</th>
+                                                    <th>Avail.</th>
+                                                    <th>Unit price</th>
+                                                    <th>Qty</th>
+                                                    <th>Total</th>
+                                                    <th class="action"><i class="fa fa-trash-o"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="cart_product">
+                                                        <a href="#"><img src="images/products/img01.jpg" alt="Product"></a>
+                                                    </td>
+                                                    <td class="cart_description">
+                                                        <p class="product-name"><a href="#">Frederique Constant </a></p>
+                                                        <small><a href="#">Color : Beige</a></small><br>
+                                                        <small><a href="#">Size : S</a></small>
+                                                    </td>
+                                                    <td class="cart_avail"><span class="label label-success">In stock</span></td>
+                                                    <td class="price"><span>$60.99 </span></td>
+                                                    <td class="qty">
+                                                        <input class="form-control input-sm" type="text" value="1">
+
+                                                    </td>
+                                                    <td class="price">
+                                                        <span>$60.99 </span>
+                                                    </td>
+                                                    <td class="action">
+                                                        <a href="#"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="cart_product">
+                                                        <a href="#"><img src="images/products/img01.jpg" alt="Product"></a>
+                                                    </td>
+                                                    <td class="cart_description">
+                                                        <p class="product-name"><a href="#">Frederique Constant </a></p>
+                                                        <small><a href="#">Color : Beige</a></small><br>
+                                                        <small><a href="#">Size : S</a></small>
+                                                    </td>
+                                                    <td class="cart_avail"><span class="label label-success">In stock</span></td>
+                                                    <td class="price"><span>$99.19 </span></td>
+                                                    <td class="qty">
+                                                        <input class="form-control input-sm" type="text" value="1">
+
+                                                    </td>
+                                                    <td class="price">
+                                                        <span>$99.19 </span>
+                                                    </td>
+                                                    <td class="action">
+                                                        <a href="#"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2" rowspan="2"></td>
+                                                    <td colspan="3">Total products (tax incl.)</td>
+                                                    <td colspan="2">$160.88 </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3"><strong>Total</strong></td>
+                                                    <td colspan="2"><strong>$160.88 </strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <button class="button pull-right"><span>Place Order</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- My Cart-->
+                        <aside class="right sidebar col-sm-3 col-xs-12">
+                            <div class="block special-product">
+                                <div class="sidebar-bar-title">
+                                    <h3>Your Cart</h3>
+                                </div>
+                                <div class="block-content">
+                                    <ul>
+                                        @if (cartDetails != null)
+                                        {
+                                            foreach (var item in cartDetails)
+                                            {
+                                                ProductDiscount productDiscount = ApiUtility.GetProductDiscountByProductUnitID(@item.ProductUnitId);
+                                                <li class="item">
+                                                    @{
+                                                        <input type="hidden" id="cRow" value="@(row += 1)"/>
+                                                        <input type="hidden" id="pName_@row" value="@item.ProductName"/>
+                                                        <input type="hidden" id="pUnitId_@row" value="@item.ProductUnitId"/>
+                                                        <input type="hidden" id="pUnitPrice_@row" value="@item.UnitPrice"/>
+                                                        decimal SpecificDiscount = Convert.ToDecimal(productDiscount.DiscountPercentage);
+
+                                                        if (SpecificDiscount > 0 && productDiscount.Validity > DateTime.Now)
+                                                        {
+                                                            if (userDiscount > SpecificDiscount)
+                                                            {
+                                                                //realPrice = (@item.Price*100)/(100 - (double)SpecificDiscount);
+                                                                realPrice = item.UnitPrice - ((item.UnitPrice*(double) userDiscount)/100);
+                                                                totalAmount += Convert.ToDecimal(realPrice);
+                                                                showCartPrice = (item.UnitPrice - ((item.UnitPrice*(double) SpecificDiscount)/100));
+                                                                Total = Total + showCartPrice;
+                                                            }
+                                                            //else if (userDiscount < SpecificDiscount)
+                                                            //{
+                                                            //    realPrice = realPrice - ((realPrice * (double)SpecificDiscount) / 100);
+                                                            //}
+                                                            else
+                                                            {
+                                                                realPrice = item.UnitPrice - ((item.UnitPrice*(double) SpecificDiscount)/100);
+                                                                showCartPrice = realPrice;
+                                                                totalAmount += Convert.ToDecimal(realPrice);
+                                                                Total = Total + realPrice;
+                                                            }
+                                                        }
+                                                        else if (userDiscount > (decimal) 0.0)
+                                                        {
+                                                            showCartPrice = item.UnitPrice;
+                                                            realPrice = item.UnitPrice - ((item.UnitPrice*(double) userDiscount)/100);
+                                                            totalAmount += Convert.ToDecimal(realPrice);
+                                                            Total = Total + item.UnitPrice;
+                                                        }
+                                                        else
+                                                        {
+                                                            showCartPrice = item.UnitPrice;
+                                                            realPrice = item.UnitPrice;
+                                                            totalAmount += Convert.ToDecimal(realPrice);
+                                                            Total = Total + realPrice;
+                                                        }
+                                                    }
+
+                                                    <div class="products-block-left">
+                                                        <a title="Sample Product" class="product-image">
+                                                            @if (isLogin)
+                                                            {
+                                                                if (@item.ProductImage != null)
+                                                                {
+                                                                    <img src="@BaseUrl.baseUrl/@item.ProductImage" alt="product">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img src="~/Content/images/products/NoProductImage.png" alt="picture"/>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (@item.ProductImage != null)
+                                                                {
+                                                                    <img src="@BaseUrl.baseUrl/@item.ProductImage" alt="product">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img src="~/Content/images/products/NoProductImage.png" alt="picture" />
+                                                                }
+
+                                                            }
+
+
+                                                        </a>
+                                                    </div>
+                                                    <div class="products-block-right">
+                                                        <p class="product-name">
+                                                            <a>@item.ProductName</a><br/>
+                                                            <a>Quantity: @item.Quantity</a>
+
+                                                        </p>
+                                                        @{
+
+                                                            if (Session["totalUpdatePrice"] != null)
+                                                            {
+                                                                totalPrice = Convert.ToDecimal(Session["totalUpdatePrice"]);
+                                                            }
+                                                            else
+                                                            {
+                                                                totalPrice = totalPrice + Convert.ToDecimal(item.Price);
+                                                            }
+                                                            var unitPrice = Convert.ToDecimal(showCartPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                                        }
+                                                        <span class="price"style="color:#2174a9">৳ @item.Price</span>
+                                                      
+                                                        @*<div class="rating">
+                                                    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
+                                                </div>*@
+                                                    </div>
+                                                </li>
+                                            }
+                                            @*<li class="item" style="font-weight: bold">
+                                                <div class="products-block-left">Total</div>
+                                                <div align="right">৳ @Convert.ToDecimal(@Total).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</div>
+                                            </li>*@
+                                        }
+                                    </ul>
+
+                                </div><br/>
+                                <div class="products-block-left">&nbsp;&nbsp;&nbsp;<strong>Total</strong></div>
+
+                                @* <div align="right"><strong>৳ @Convert.ToDecimal(@Total).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))&nbsp;</strong></div> *@
+                                <div align="right"><strong>৳ @Convert.ToDecimal(@totalPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))&nbsp;</strong></div>
+                                
+                                @if (Session["DeliveryChargeAmount"] != null)
+                                {
+                                    <br/><div style="float: left;">&nbsp;&nbsp;&nbsp;<strong>Delivery Charge</strong></div>
+                                    <div align="right">৳ @Convert.ToDecimal(Session["DeliveryChargeAmount"]).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))&nbsp;</div>
+                                }
+
+
+                            </div>
+                        </aside>
+                        <!-- My Cart End -->
+                    </div>
+                </div>
+            </section>
+            <!-- Main Container End -->
+    @section scripts{
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+            jQuery.validator.addMethod("phone", function (phone_number, element) {
+                phone_number = phone_number.replace(/\s+/g, "");
+                return this.optional(element) || phone_number.length > 10 &&
+                      phone_number.match(/\+?(88)?01[56789][0-9]{8}\b/);
+            }, "Invalid phone number");
+
+
+         
+            $(document).ready(function () {
+           
+                //$(function () {
+                //    $("#date_picker").datepicker({
+                //        dateFormat: 'dd-mm-yy',
+                //        maxDate: '+1w',
+                //        minDate: 'today'
+
+                //    });
+                //});
+              
+                $("#formCheckout").validate({
+                    rules: {
+                        CustomerName: "required",
+                        DeliveryAddress: "required",
+                        Email: {
+                            required: true,
+                            email: true
+                        },
+                        ThanaId: "required",
+                        District: "required",
+                        MobileNo: {
+                            required: true,
+                            phone: true
+                        }
+                    },
+                    messages: {
+                        CustomerName: "Please enter your name",
+                        DeliveryAddress: "Please enter delivery address",
+                        Email: {
+                            required: "Please enter a email",
+                            email: "Please enter a valid email. Example - abc@gmail.com"
+                        },
+                        ThanaId: "Please select a thana",
+                        District: "Please select your district",
+                        MobileNo: {
+                            required: "Please enter a mobile no",
+                            phone: "Please enter a valid mobile no. Example - 01xxxxxxxxx"
+                        }
+                    }
+                });
+            });
+
+            $("#District").change(function () {
+                document.getElementById("masterLinkMessage").innerHTML = "";
+                var vDistrictId = $("#District").val();
+                var district = { districtId: vDistrictId };
+                $("#ThanaId").empty();
+                $("#ThanaId").append('<option value="" selected>Select Thana</option>');
+
+                $.ajax({
+                    url: '../MasterDepot/GetThanaByDistrictId',
+                    type: "GET",
+                    dataType: 'JSON',
+                    contentType: "application/json; charset=utf-8",
+                    data: district,
+                    success: function(data) {
+                        $.each(data, function (index, value) {
+                            $("#ThanaId").append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                        });
+                    },
+                    error: function() {
+                        alert("Something went wrong");
+                    }
+
+                });
+            });
+
+            $("#ThanaId").change(function () {
+
+                var ThanaId = $("#ThanaId").val();
+                var anId = { id: ThanaId };
+                $.ajax({
+                    url: '../Order/CheckMasterDepotLink',
+                    type: "POST",
+                    dataType: 'JSON',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(anId),
+                    success: function (data) {
+
+
+                        if (data === "Sorry! There is no service available for this region") {
+
+                            document.getElementById("masterLinkMessage").innerHTML = data + ".";
+                            document.getElementById("#CheckoutBtn").disabled = true;
+                            
+                        }
+                        else {
+
+                            document.getElementById("masterLinkMessage").innerHTML = "";
+                            document.getElementById("#CheckoutBtn").disabled = false;
+                        }
+
+                        $("#ThanaId").focus();
+
+                    },
+                    error: function () {
+                        alert("Something went wrong");
+                    }
+                });
+
+            });
+
+            //$("#CheckoutBtn").click(function (e) {
+            //    //if (validation()) {
+
+            //    alert('Please fill out the empty field');
+            //    //}
+            //    //else {               
+            //    var order = {};
+            //    order.CustomerName = $("#CustomerName").val();
+            //    order.MobileNo = $("#MobileNo").val();
+            //    order.Email = $("#Email").val();
+            //    order.DeliveryAddress = $("#DeliveryAddress").val();
+            //    order.ThanaId = $("#ThanaId").val();
+            //    var anorder = { anOrder: order };
+            //    $.ajax({
+            //        url: '../Order/Checkout',
+            //        type: "POST",
+            //        dataType: 'JSON',
+            //        contentType: "application/json; charset=utf-8",
+            //        data:JSON.stringify(anorder),
+            //        success: function(data) {                       
+            //            var message = '<div class="alert alert-success alert-dismissible"><a class="close" data-dismiss="alert" aria-label="close">&times;</a><h3>' + data + '</h3></div>';
+            //            if (data === "Sorry! There is no service available for this region")
+            //            {
+            //                $('#CheckoutBtn').prop('disabled', false);
+            //                document.getElementById("masterLinkMessage").innerHTML = data+".";
+            //            } else {
+            //                $('#CheckoutBtn').prop('disabled', true);
+            //                document.getElementById("masterLinkMessage").innerHTML = "";
+            //                $("#mgs").empty();
+            //                $("#mgs").append(message);
+            //            }
+
+            //            $("#ThanaId").focus();
+
+            //        },
+            //        error: function() {
+            //            alert("Something went wrong");
+            //        }
+            //    });
+            //    //}
+            //});
+
+            //Delete from cart
+            function DeleteItem(row) {
+                var pUnitId = $('#pUnitId_' + row).val();
+                var pQuantity = { id: pUnitId };
+                $.ajax({
+                    type: "POST",
+                    url: "../Order/DeleteFromCart",
+                    data: JSON.stringify(pQuantity),
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        window.location.reload();
+                    }
+                });
+            }
+            //Update Quantity from cart
+            function UpdateQty(row) {
+                var pUnitId = $('#pUnitId_' + row).val();
+                var pPrice = $('#pUnitPrice_' + row).val();
+                var pQty = $('#pQty_' + row).val();
+                var pQuantity = { quantity: pQty, unitId: pUnitId, price: pPrice };
+                $.ajax({
+                    type: "POST",
+                    url: "../Product/UpdateQuantity",
+                    data: JSON.stringify(pQuantity),
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        window.location.reload();
+                    }
+                });
+            }
+            //function wcqib_refresh_quantity_increments() {
+            //    jQuery("div.quantity:not(.buttons_added), td.quantity:not(.buttons_added)").each(function(a, b) {
+            //        var c = jQuery(b);
+            //        c.addClass("buttons_added"), c.children().first().before('<input type="button" value="-" class="minus" />'), c.children().last().after('<input type="button" value="+" class="plus" />')
+            //    })
+            //}
+
+            String.prototype.getDecimals || (String.prototype.getDecimals = function() {
+                var a = this,
+                    b = ("" + a).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+                return b ? Math.max(0, (b[1] ? b[1].length : 0) - (b[2] ? +b[2] : 0)) : 0
+            }), jQuery(document).ready(function() {
+                wcqib_refresh_quantity_increments()
+            }), jQuery(document).on("updated_wc_div", function() {
+                wcqib_refresh_quantity_increments()
+            }), jQuery(document).on("click", ".plus, .minus", function() {
+                var a = jQuery(this).closest(".quantity").find(".qty"),
+                    b = parseFloat(a.val()),
+                    c = parseFloat(a.attr("max")),
+                    d = parseFloat(a.attr("min")),
+                    e = a.attr("step");
+                b && "" !== b && "NaN" !== b || (b = 0), "" !== c && "NaN" !== c || (c = ""), "" !== d && "NaN" !== d || (d = 0), "any" !== e && "" !== e && void 0 !== e && "NaN" !== parseFloat(e) || (e = 1), jQuery(this).is(".plus") ? c && b >= c ? a.val(c) : a.val((b + parseFloat(e)).toFixed(e.getDecimals())) : d && b <= d ? a.val(d) : b > 0 && a.val((b - parseFloat(e)).toFixed(e.getDecimals())), a.trigger("change")
+            });
+
+            $('.input-number').focusin(function () {
+                $(this).data('oldValue', $(this).val());
+            });
+            $('.input-number').keyup(function () {
+                var minValue = parseInt($(this).attr('min'));
+                var maxValue = parseInt($(this).attr('max'));
+                var valueCurrent = parseInt($(this).val());
+                var name = $(this).attr('name');
+                if (valueCurrent >= minValue) {
+                    $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
+                } else {
+                    alert('Product quantity should not be less than 1');
+                    $(this).val($(this).data('oldValue'));
+                }
+                if (valueCurrent <= maxValue) {
+                    $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled');
+                } else {
+                    alert('Product quantity should not be greater than 1000');
+                    $(this).val($(this).data('oldValue'));
+                }
+
+
+            });
+            $(".input-number").keydown(function(e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+                               </script>
+                               }

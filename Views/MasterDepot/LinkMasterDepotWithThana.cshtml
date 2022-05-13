@@ -1,0 +1,110 @@
+﻿@using System.Web.Mvc.Html
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model EFreshStore.Models.Context.ThanaWiseMasterDepot
+
+@{
+    ViewBag.Title = "Link master depot with thana";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/form-design.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "linkMasterDepotThanaform"}))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h2>Link Master Depot With Thana</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MasterDepotId, "Master Depot", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.MasterDepotId, null, "Select Master Depot" , new { @required="required"})
+                        @Html.ValidationMessageFor(model => model.MasterDepotId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.Label("District", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.DropDownList("District", new SelectList(ViewBag.DistrictId, "Id", "Name"), "Select District",new {@required="required"})
+                        @Html.ValidationMessage("District", "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThanaId, "Thana", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ThanaId, new SelectList(ViewBag.ThanaId, "Id", "Name"), "Select Thana", new { @id = "", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.ThanaId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" value="Create" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div style="margin-left: 50px; color: red">
+            @Html.ActionLink("Back to List", "Views", "", htmlAttributes: new { @style = "color: red" })
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.0.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#District").change(function() {
+            var vDistrictId = $("#District").val();
+            var district = { districtId: vDistrictId };
+            $("#ThanaId").empty();
+            $("#ThanaId").append('<option value="" selected>Select Thana</option>');
+
+            $.ajax({
+                url: '../MasterDepot/GetThanaByDistrictId',
+                type: "GET",
+                dataType: 'JSON',
+                contentType: "application/json; charset=utf-8",
+                data: district,
+                success: function(data) {
+                    $.each(data, function(index, value) {
+                        $("#ThanaId").append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                    });
+                },
+                error: function() {
+                    alert("Something went wrong");
+                }
+            });
+        });
+
+
+        $("#linkMasterDepotThanaform").validate({
+            rules: {
+                MasterDepotId: "required",
+                ThanaId: "required"
+
+            },
+            messages: {
+                MasterDepotId: "Please select master depot",
+                ThanaId: "Please select thana"
+            }
+        });
+    });
+</script>
+</body>
+</html>

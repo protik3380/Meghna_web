@@ -1,0 +1,264 @@
+﻿
+@using System.Globalization
+@using Vereyon.Web
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.Enum
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@using Vereyon.Web
+@model EFreshStore.Models.Context.Order
+@{
+    long userTypeId = 0;
+    long userId = 0;
+    var realPrice = 0.0;
+    var showCartPrice = 0.0;
+    var total = 0.0;
+    var isLogin = false;
+    var userName = "";
+    int countItem = 0;
+    var row = 0;
+    decimal userDiscount = 0;
+    decimal totalAmount = 0;
+    List<CartView> cartDetails = new List<CartView>();
+    if (Session["cartView"] != null)
+    {
+        cartDetails = (List<CartView>)Session["cartView"];
+        countItem = cartDetails.Count;
+        //totalAmount = cartDetails.Sum(c => c.Price).ToString();
+    }
+
+    if (Session["email"] != null)
+    {
+        isLogin = true;
+        userName = Session["email"].ToString();
+        //userDiscount = Convert.ToDecimal(Session["discount"]);
+        userId = Convert.ToInt64(Session["UserId"]);
+        userTypeId = Convert.ToInt64(Session["userTypeId"]);
+    }
+    var user = ViewBag.User;
+
+    Session["guest"] = null;
+    var deliveryCharge = (DeliveryCharge)Session["DeliveryCharge"];
+}
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="index.html">Home</a><span>&raquo;</span></li>
+                    <li class=""> <a title="Go to Home Page" href="shop_grid.html">Checkout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+@using (Html.BeginForm("Checkout", "Order", FormMethod.Post, new { id = "formCheckout", @class = "checkout-form" }))
+{
+    <div class="main-container col2-left-layout">
+        <div class="container">
+            <div class="row">
+                <div class="col-main col-sm-9 col-xs-12">
+                    <div class="col-sm-8" style="width: 100%">
+                        <!-- Customer Information Container -->
+                        <section class="main-container col1-layout">
+                            <div>
+                                <div class="page-content">
+                                    <div class="account-login">
+                                        <div class="box-authentication" style="width: 85%;">
+                                            <h4>Place Order Information @ViewBag.S</h4>
+                                            @if (isLogin)
+                                            {
+                                                <h5 class="before-login-text" style="padding: 15px 0;">Please fillup these information below</h5>
+                                                if (userTypeId == (long)UserTypeEnum.Corporate)
+                                                {
+                                                    var companyName = @user.CorporateContract.CompanyName;
+                                                    //<p style="padding: 15px 0;"> User Type</p>
+                                                    <input id="CustomerName" name="CustomerName" type="text" class="form-control" disabled="disabled" required="" value="Corporate User" placeholder="usertype" style="margin-top: 20px">
+                                                    //<p style="padding: 15px 0;"> Company</p>
+                                                    <input id="CompanyName" name="CompanyName" type="text" class="form-control" disabled="disabled" required="" value="@companyName" placeholder="company name" style="margin-top: 20px">
+
+                                                }
+                                                else if (userTypeId == (long)UserTypeEnum.MeghnaUser)
+                                                {
+                                                    <p style="padding: 15px 0;"> User Type</p>
+                                                    <input id="CustomerName" name="CustomerName" type="text" class="form-control" disabled="disabled" required="" value="MGI Employee" placeholder="usertype" style="margin-top: 20px">
+
+                                                }
+                                                //<p style="padding: 15px 0;"> Name<span class="required">*</span></p>
+                                                    <input id="CustomerName" name="CustomerName" type="text" class="form-control" required="" value="@user.Name" placeholder="Name" style="margin-top: 20px">
+                                                    //<p style="padding: 15px 0;"> Email<span class="required">*</span></p>
+                                                    <input id="Email" name="Email" type="email" class="form-control" placeholder="Email" value="@user.Email" style="margin-top: 20px">
+                                                    //<p style="padding: 15px 0;"> Mobile No.<span class="required">*</span></p>
+                                                    <input id="MobileNo" name="MobileNo" type="text" class="form-control" value="@user.MobileNo" placeholder="Mobile No." maxlength="11" style="margin-top: 20px">
+                                                    //<p style="padding: 15px 0;"> Address<span class="required">*</span></p>
+                                                    <textarea id="DeliveryAddress" name="DeliveryAddress" class="form-control" placeholder="Delivery Addrees" style="margin-top: 20px">@user.DeliveryAddress1</textarea>
+                                                    <input type="hidden" id="address1" name="address1" value="@user.DeliveryAddress1" />
+                                                    <input type="hidden" id="oldAddress" value="@user.DeliveryAddress1" />
+                                                  <br/> <span><input type="checkbox" value="isUpdateAddress" id="isUpdateAddress" name="isUpdateAddress" onclick="addressUpdate()" style="height:14px; width: 14px;"/></span><span> Update Address</span>
+                                                    @*<label class="inline" for="isUpdateAddress" style="font-weight: normal; float: right; margin-bottom: 20px" onclick="addressUpdate()" >
+                                                     <input type="checkbox" value="isUpdateAddress" id="isUpdateAddress" name="isUpdateAddress">
+                                                        Update address
+                                                    </label>*@
+                                            }
+                                            else
+                                            {
+                                                <h5 class="before-login-text" style="padding: 15px 0;">Please fillup these information below</h5>
+                                                //<p style="padding: 15px 0;"> Name<span class="required">*</span></p>
+                                                <input id="CustomerName" name="CustomerName" type="text" class="form-control" required="" placeholder="Name" style="margin-top: 20px">
+                                                //<p style="padding: 15px 0;"> Email<span class="required">*</span></p>
+                                                <input id="Email" name="Email" type="email" class="form-control" placeholder="Email" style="margin-top: 20px">
+                                                //<p style="padding: 15px 0;"> Mobile No.<span class="required">*</span></p>
+                                                <input id="MobileNo" name="MobileNo" type="text" class="form-control" placeholder="Mobile No." maxlength="11" style="margin-top: 20px">
+                                                //<p style="padding: 15px 0;"> Address<span class="required">*</span></p>
+                                                <textarea id="DeliveryAddress" name="DeliveryAddress" class="form-control" placeholder="Delivery Addrees" style="margin-top: 20px"></textarea>
+                                            }
+                                            @*<p style="padding: 15px 0;"> Select District<span class="required">*</span></p>*@
+                                            @Html.DropDownList("District", new SelectList(ViewBag.DistrictId, "Id", "Name"), "-- Select District --", new { @class = "form-control", required = "required", @style = "font-weight: normal;margin-top:20px;padding-left:15px" })
+
+                                            @*<p style="padding: 15px 0;"> Select Thana<span class="required">*</span></p>*@
+                                            <select name="ThanaId" id="ThanaId" class="form-control" required="" style="font-size: 15px; margin-top: 20px">
+                                                <option>-- Select Thana --</option>
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.ThanaId, null, new { })
+                                            <p id="masterLinkMessage" style="font-size: 14px; color: red"></p>
+                                            <br />
+                                            <div class="radio">
+                                                        <label style="margin-right: 20px">
+                                                            <input type="radio" name="PaymentMethod" id="PaymentMethod" value="COD" checked>
+                                                            Cash on Delivery
+                                                        </label>
+                                                    
+                                                        <label>
+                                                            <input type="radio" name="PaymentMethod" id="PaymentMethod" value="ONLINE">
+                                                            Online Payment
+                                                        </label>
+                                                   
+                                                </div>
+                                                
+                                            <button class="button" id="#CheckoutBtn" onclick="addressUpdate()" style="float: right">Place Order</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Main Container End -->
+                    </div><div class="col-sm-4"></div>
+
+                </div>
+                <!-- My Cart-->
+                <aside class="right sidebar col-sm-3 col-xs-12">
+                    <div class="block special-product">
+                        <div class="sidebar-bar-title">
+                            <h3>Your Cart</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul>
+                                @if (cartDetails != null)
+                                {
+                                    foreach (var item in cartDetails)
+                                    {
+                                        ProductDiscount productDiscount = ApiUtility.GetProductDiscountByProductUnitID(@item.ProductUnitId);
+                                        <li class="item">
+                                            @{
+                                                <input type="hidden" id="cRow" value="@(row += 1)"/>
+                                                <input type="hidden" id="pName_@row" value="@item.ProductName"/>
+                                                <input type="hidden" id="pUnitId_@row" value="@item.ProductUnitId"/>
+
+                                                <input type="hidden" id="pUnitPrice_@row" value="@item.UnitPrice"/>
+                                                    decimal SpecificDiscount = Convert.ToDecimal(productDiscount.DiscountPercentage);
+                                                    
+                                                    realPrice = item.Price;
+                                                    totalAmount += Convert.ToDecimal(realPrice);
+                                                    total = total + realPrice;
+                                                    
+                                                }
+
+                                            <div class="products-block-left">
+                                                <a title="Sample Product" class="product-image">
+                                                    @if (isLogin)
+                                                    {
+                                                        if (@item.ProductImage != null)
+                                                        {
+                                                            <img src="@BaseUrl.baseUrl/@item.ProductImage" alt="product">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/Content/images/products/NoProductImage.png" alt="picture"/>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (@item.ProductImage != null)
+                                                        {
+                                                            <img src="@BaseUrl.baseUrl/@item.ProductImage" alt="product">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/Content/images/products/NoProductImage.png" alt="picture" />
+                                                        }
+                                                    }
+
+
+                                                </a>
+                                            </div>
+                                            <div class="products-block-right">
+                                                <p class="product-name">
+                                                    <a>@item.ProductName</a><br/>
+                                                    <a>Quantity: @item.Quantity</a>
+
+                                                </p>
+                                                @{
+                                                    var unitPrice = Convert.ToDecimal(realPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                                }
+                                                <span class="price"style="color:#2174a9">৳ @unitPrice</span>
+                                                @*<div class="rating">
+                                                    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
+                                                </div>*@
+                                            </div>
+                                        </li>
+                                    }
+                                            
+                                }
+
+                            </ul>
+
+                        </div><br/>
+                        <div class="products-block-left">&nbsp;&nbsp;&nbsp;<strong>Total</strong></div>
+                        @{
+                            decimal x = Convert.ToDecimal(total - (double)totalAmount);
+                            string totalDiscount = x.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                            string subTotal = total.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                            var grandTotal = totalAmount;
+                            Session["Subtotal"] = total;
+                            Session["Discount"] = totalDiscount;
+                            Session["GrandTotal"] = totalAmount;
+                            if (Session["totalUpdatePrice"] != null)
+                            {
+                                grandTotal = Convert.ToDecimal(Session["totalUpdatePrice"]);
+                            }
+                            else
+                            {
+                                grandTotal = Convert.ToDecimal(total);
+                            }
+
+                        }
+                        <div align="right"><strong>৳ @Convert.ToDecimal(@grandTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))&nbsp;</strong></div>
+                        @if (Session["DeliveryChargeAmount"] != null)
+                        {
+                            <br /><div style="float: left;">&nbsp;&nbsp;&nbsp;<strong>Delivery Charge</strong></div>
+                            <div align="right">৳ @Convert.ToDecimal(Session["DeliveryChargeAmount"]).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))&nbsp;</div>
+                        }
+                        
+                    </div>
+                </aside>
+                <!-- My Cart End -->
+            </div>
+        </div>
+    </div>
+                                                        }
+<!-- Customer Information Container End -->

@@ -1,0 +1,61 @@
+﻿@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.MasterDepot>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    //List<MasterDepot> masterDepots = ViewBag.MasterDepots;
+}
+<div class="chart-area">
+    <div class="container">
+        @Html.RenderFlashMessages()
+        <h2>Master Depot Details</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Contact Person</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                @if (Model != null)
+                                {
+                                    foreach (var masterDepot in Model)
+                                    {
+                                        <tr>
+                                            <td>@masterDepot.Name</td>
+                                            <td>@masterDepot.Address</td>
+                                            <td>@masterDepot.ContactPerson</td>
+                                            <td>@masterDepot.Phone</td>
+                                            <td>@masterDepot.Email</td>
+                                            
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new {id = masterDepot.Id}, htmlAttributes: new {@style = "color: red"})
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

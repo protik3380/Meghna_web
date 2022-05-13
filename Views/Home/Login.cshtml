@@ -1,0 +1,119 @@
+﻿@using Vereyon.Web
+@model EFreshStore.Models.Context.User
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+
+<div id="page">
+
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul>
+                        <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                        <li><strong>Login</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+
+    <!-- Main Container -->
+    <section class="main-container col1-layout">
+        <div class="main container">
+            <div class="page-content">
+                <div class="account-login">
+                    <div class="box-authentication new-customer-box Account Page ">
+                       @using (Html.BeginForm("Login", "Home", null, FormMethod.Post, new { id = "forgotPassword" }))
+                       {
+                           <div id="mgs">
+                               
+                               @Html.RenderFlashMessages()
+                               @if (@ViewBag.Message1 != null)
+                               {<div class="alert alert-danger">
+                                    <strong>@ViewBag.Message1!</strong> .
+                                </div>
+                               }
+                           </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="check-title">
+                                        <h4>Login</h4>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    @*<label for="Username"> Email <span class="required">*</span></label>*@
+                                    <div class="input-text">
+                                       <input class="form-control" type="text" id="Email" name="Email" placeholder="Enter email address">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    @*<label for="Password"> Password <span class="required">*</span></label>*@
+                                    <div class="input-text" style="margin-top: 20px">
+                                        @Html.PasswordFor(model => model.Password, new {@class = "form-control", placeholder = "Enter password", required = "required"})
+                                        @Html.ValidationMessageFor(model => model.Password)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="billing-checkbox">
+                                        <p class="forgot-pass"><a href="@Url.Action("ForgotPassword","Home")">Lost your password?</a></p>
+                                    </div>
+                                    <div class="submit-text">
+                                        <button class="button" type="submit"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button> &nbsp;&nbsp;
+                                        <span><input type="checkbox" id="rememberMe" value="true" name="rememberMe" style="height:14px; width: 14px;" /></span>&nbsp;<span style="font-size: 15px">Remember me</span>
+                                        @*<label class="inline" for="rememberme">
+                                            <input type="checkbox" value="forever" id="rememberme" name="rememberme">
+                                            Remember me
+                                        </label>*@
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').addClass('active');
+            $(function () {
+                setTimeout(function () {
+                    $("#mgs").hide('blind', {}, 500);
+                }, 5000);
+            });
+
+            $("#forgotPassword").validate({
+                rules: {
+                    Email: {
+                        required: true,
+                        email: true
+                    },
+                    Password: {
+                        required: true
+                       
+                    }
+                 },
+                messages: {
+                    Email: {
+                        required: "Please enter your email",
+                        email: "Please enter a valid email. Example - abc@gmail.com"
+                    },
+                    Password: {
+                        required: "Please enter your password"
+                    }
+                }
+            });
+        });
+    </script>
+}
+      

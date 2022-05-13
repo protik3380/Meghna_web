@@ -1,0 +1,193 @@
+﻿@model List<EFreshStore.Models.Context.Order>
+@{
+    ViewBag.Title = "My Orders";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+@section style{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.js" type="text/javascript"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tblCartProduct').DataTable({
+                "ordering": false,
+                "searching": false
+                
+            });
+        });
+    </script>
+  
+}
+
+
+
+
+<!-- Chart AREA -->
+<section id="cart_items" class="container" style="margin-top: 0px">
+
+    <h1 style="text-align: center">MY ORDERS</h1>
+    <div class="table-responsive cart_info">
+
+        <table class="table table-condensed " id="tblCartProduct" style="border-bottom: 1px solid #d6d6d6; margin-bottom: 20px !important;">
+            <thead>
+            <tr style="font-weight: bold; background: #0074ad; color: white; font-size: 16px;">
+                <td class="" style="padding: 15px 0 15px 15px;">Order No</td>
+                <td style="padding: 15px 0 15px 0;">Order Date</td>
+                <td class="" style="padding: 15px 0 15px 0;">Delivery Address</td>
+                <td style="padding: 15px 0 15px 0;">Status</td>
+                <td style="padding: 15px 0 15px 0;">Order Details</td>
+            </tr>
+            </thead>
+            <tbody>
+
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                   var status =  @item.OrderState.Status;
+                    var rejectStatus = @item.OrderRejectId;
+                    <tr style="max-height: 45px;height: 45px;">
+                        <td style="padding-left: 15px;vertical-align: middle;">@item.OrderNo</td>
+                        @if (item.OrderDate != null)
+                        {
+                            <td style="vertical-align: middle;">@item.OrderDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                        <td class="col-lg-5" style="vertical-align: middle;">@item.DeliveryAddress</td>
+                        @if (rejectStatus != null)
+                        {
+                            <td style="color: red;vertical-align: middle;">
+                               Rejected
+                            </td>
+                        }
+                        else if (status != null)
+                        {
+                            if (status == "Rejected")
+                            {
+                                <td style="color: red; vertical-align: middle;">
+                                    @status
+                                </td>
+                            }
+                            else if (status == "Received")
+                            {
+                                <td style="color: rgb(47, 192, 47); vertical-align: middle;">
+                                    @status
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="vertical-align: middle;">
+                                    @status
+                                </td>
+                            }
+
+                        }
+                            @*if (item.OrderState.Id == (long)OrderStatusEnum.Pending)
+                        {
+                            <td style="vertical-align: middle;">
+                                @OrderStatusEnum.Pending.ToString()
+                            </td>
+
+                        }
+                        else if (item.OrderState.Id == (long) OrderStatusEnum.Accepted)
+                        {
+                            <td style="vertical-align: middle;">
+                                @OrderStatusEnum.Accepted.ToString()
+                            </td>
+                        }
+                        else if (item.OrderState.Id == (long) OrderStatusEnum.Packaging)
+                        {
+                            <td style="vertical-align: middle;">
+                                @OrderStatusEnum.Packaging.ToString()
+                            </td>
+                        }
+                        else if (item.OrderState.Id == (long) OrderStatusEnum.Delivering)
+                        {
+                            <td style="vertical-align: middle;">
+                                @OrderStatusEnum.Delivering.ToString()
+                            </td>
+                        }
+                        else if (item.OrderState.Id == (long) OrderStatusEnum.Received)
+                        {
+                            <td style="color: rgb(47, 192, 47);vertical-align: middle;">
+                                @OrderStatusEnum.Received.ToString()
+                            </td>
+                        }
+                        else if (item.OrderState.Id == (long) OrderStatusEnum.Rejected)
+                        {
+                            <td style="color: red;vertical-align: middle;">
+                              
+                                @OrderStatusEnum.Rejected.ToString()
+                            </td>
+                        }*@
+                        else
+                        {
+                            <td></td>
+                        }
+
+                        <td style="vertical-align: middle;">
+                            @Html.ActionLink("Details", "Details", new {id = item.Id}, htmlAttributes: new {@style = "color: red"})
+                        </td>
+                    </tr>
+
+                }
+                
+            }
+            </tbody>
+            
+        </table>
+
+    </div>
+    <div class="cart-button">
+        @*<button type="button" onclick="window.location.href ='/Home/Index'" class="btn">Continue Shopping</button>*@
+        @*<button type="button" class="btn floatright">Update Cart</button>*@
+    </div>
+    <div class="row">
+        <div class="cart-shopping-area fix">
+            <div class="col-md-4 col-sm-4">
+                @*<div class="calculate-shipping chart-all">
+                        <h2>CALCULATE SHIPPING</h2>
+                        <p>Enter your destination to get a shipping estimate.</p>
+                        <select>
+                            <option>Sellect Country</option>
+                            <option>America</option>
+                            <option>Afganisthan</option>
+                            <option>Bangladesh</option>
+                            <option>Chin</option>
+                            <option>Japna</option>
+                        </select>
+                        <select>
+                            <option>State/Provinence</option>
+                            <option>Dhaka</option>
+                            <option>Borishal</option>
+                            <option>Gajipur</option>
+                            <option>Kustiya</option>
+                            <option>Vola</option>
+                            <option>Gaibandha</option>
+                        </select>
+                        <input type="text" placeholder="Zip / Post Code">
+                        <button type="button" class="btn">Get A Quote</button>
+                    </div>*@
+            </div>
+            <div class="col-md-4 col-sm-4">
+                @*<div class="chart-all">
+                        <h2>PROMOTIONAL CODE</h2>
+                        <p>Enter your destination to get a shipping estimate.</p>
+                        <input type="text" placeholder="Zip / Post Code">
+                        <button type="button" class="btn">Get A Quote</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</section>
+
+  

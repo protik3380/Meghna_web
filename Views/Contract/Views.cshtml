@@ -1,0 +1,57 @@
+﻿@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.CorporateContract>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    List<CorporateContract> contracts = ViewBag.contract;
+}
+<div class="chart-area">
+    <div class="container">
+        @Html.RenderFlashMessages()
+        <h2>Corporate Contract Details</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <th>Description</th>
+                                        <th>Discount Percentage</th>
+                                        <th>Validity</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var contract in contracts)
+                                        {
+                                            <tr>
+                                                <td>@contract.CompanyName</td>
+                                                <td>@contract.Description</td>
+                                                <td>@contract.DiscountPercentage</td>
+                                                <td>@contract.Validity</td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "Edit", new {id = contract.Id}, htmlAttributes: new {@style = "color: red"})
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

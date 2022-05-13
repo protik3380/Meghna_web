@@ -1,0 +1,266 @@
+﻿@using System.Globalization
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.Enum
+@using EFreshStore.Utility
+@model EFreshStore.Models.Context.Order
+
+@{
+    ViewBag.Title = "Order History";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    List<OrderDetail> detailList = (List<OrderDetail>)ViewBag.OrderDetails;
+    var status = (string)ViewBag.Status;
+    var imageUrl = "Content/img/DeliveryMan/no-image.png";
+}
+<style>
+    #DeliveryManInfo {
+        /*text-align: center;*/
+        width: 50%;
+        /*border: 1px #eaeaea solid;*/
+        margin: auto;
+        min-width: 300px;
+        padding: 15px;
+    }
+
+        #DeliveryManInfo h4 {
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+</style>
+@if (status == "Unauthorized")
+{
+    <!--Container -->
+    <div class="error-page">
+        <div class="container">
+            <div class="error_pagenotfound"> <strong>4<span id="animate-arrow">0</span>1 </strong> <br />
+                <b>Unauthorized!</b> <em>Sorry, you are not authorized to access this page.</em>
+                <br />
+                @*@Html.ActionLink("<i class='fa fa-arrow-circle-left fa-lg'></i>&nbsp; Back to Home", "Index","Home",null, new { @class = "button-back" })*@
+                <a href="@Url.Action("Index","Home")" class="button-back"><i class="fa fa-arrow-circle-left fa-lg"></i>&nbsp; Back to Home</a> </div>
+            <!-- end error page notfound --> 
+      
+        </div>
+    </div>
+}
+else
+{
+    <div style="margin-top: 20px;">
+
+        <h1 class="text-center">Order # @Model.OrderNo</h1>
+        <h5 class="text-center">Order Date: @Model.OrderDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</h5>
+        <hr/>
+        <div class="tabbable container">
+            @if (@Model.OrderStateId == (long) OrderStatusEnum.Rejected)
+            {
+                <h4 class="text-center" style="color: red">Sorry !! This order has been rejected.</h4>                                    
+            }
+            <ul class="nav nav-tabs wizard">
+                <li id="Pending"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">1</span>Pending</a></li>
+                <li id="Confirm"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">2</span>Confirmed</a></li>
+                <li id="OnProcessing"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">3</span>On Processing</a></li>
+                <li id="Shipped"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">4</span>Shipped</a></li>
+                <li id="Delivering"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="true"><span class="nmbr">5</span>Delivered</a></li>
+                <li id="Received"><a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="true"><span class="nmbr">6</span>Received</a></li>
+            </ul>
+        </div>
+            <hr />
+        <div class="row text-center">
+           
+            @if (Model.DeliveryManName != null)
+            {
+                <div class="text-center col-md-6">
+                    <div id="DeliveryManInfo" class="text-center">
+                        <h4>Customer Information</h4>
+                        <h5>@Model.CustomerName</h5>
+                        <h5>@Model.MobileNo</h5>
+                        <h5>@Model.Email</h5>
+                        <h5>@Model.DeliveryAddress</h5>
+                    </div>
+                </div>
+
+                <div id="DeliveryManInfo" class="text-center col-md-6">
+                    <h4>Delivery Man Information</h4>
+                    @if (!string.IsNullOrEmpty(Model.DeliveryManImageUrl))
+                        {
+                           
+                            <div class="col-md-3" style="padding: 0"></div>
+                        <div class="col-md-2">
+                            <a><img src="@BaseUrl.baseUrl\@Model.DeliveryManImageUrl" alt="delivery-man" style="width: 100px; height: auto"></a>
+                        </div>
+                        @*<h5 class="text-left">@Model.DeliveryManName</h5>*@
+                        <h5 class="text-left"><a data-toggle="modal" data-target="#modalCart" onclick="GetDeliveryManInfo('@Model.DeliveryManName', '@Model.DeliveryManEmail', '@Model.DeliveryManMobile', '@Model.DeliveryManImageUrl')" style="cursor: pointer">@Model.DeliveryManName</a></h5>
+                        <h5 class="text-left">@Model.DeliveryManMobile</h5>
+                        <h5 class="text-left">@Model.DeliveryManEmail</h5>
+                    }
+                    else
+                    {
+                       
+                        <h5><a data-toggle="modal" data-target="#modalCart" onclick="GetDeliveryManInfo('@Model.DeliveryManName', '@Model.DeliveryManEmail', '@Model.DeliveryManMobile', '@imageUrl')" style="cursor: pointer">@Model.DeliveryManName</a></h5>
+                        <h5>@Model.DeliveryManMobile</h5>
+                        <h5>@Model.DeliveryManEmail</h5>
+                    }
+
+
+
+                        </div>
+                    }
+                    else
+                    {
+                <div class="text-center col-md-12">
+                    <div  id="DeliveryManInfo" class="text-center">
+                        <h4>Customer Information</h4>
+                        <h5>@Model.CustomerName</h5>
+                        <h5>@Model.MobileNo</h5>
+                        <h5>@Model.Email</h5>
+                        <h5>@Model.DeliveryAddress</h5>
+                    </div>
+                </div>
+            }
+
+            @*<p>Customer: @Model.CustomerName</p>
+            <p>Mobile No: @Model.MobileNo</p>
+            <p>Email: @Model.Email</p>
+            <p>Delivery Address: @Model.DeliveryAddress</p>
+            
+            <br/>*@
+        </div>
+    </div>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-condensed" id="tblCartProduct">
+                <thead>
+                    <tr style="background: #0074ad; color: white;">
+                        <th class="text-left" style="padding-left: 10px;">SL No.</th>
+                        <th class="text-left">Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right" style="padding-right: 10px;">Price</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (detailList != null)
+                    {
+                        int count = 0;
+                        double TotalPrice = 0;
+
+                        foreach (var item in detailList)
+                        {
+                            count += 1;
+                            TotalPrice += (double)@item.Price;
+                            string price = Convert.ToDecimal(@item.Price).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                            <tr>
+                                <td class="text-left" style="padding-left: 10px;">@count.</td>
+                                <td class="text-left">@item.ProductUnit.Product.Name</td>
+                                <td class="text-center">@item.PacketQuantity</td>
+                                <td class="text-right" style="padding-right: 10px;">@price</td>
+
+                            </tr>
+                        }
+                        if (Model.CouponDiscount != null)
+                        {
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center" style="font-weight: bold">Sub Total</td>
+                                <td class="text-right" style="padding-right: 10px; font-weight: bold">@Convert.ToDecimal(TotalPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center" style="font-weight: bold">Discount</td>
+                                <td class="text-right" style="padding-right: 10px; font-weight: bold">@Convert.ToDecimal(Model.CouponDiscount).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</td>
+                            </tr>
+                            <tr>
+                                @{
+                                    decimal grTotal = Convert.ToDecimal(Convert.ToDecimal(TotalPrice) - Convert.ToDecimal(Model.CouponDiscount));
+                                }
+                                <td></td>
+                                <td></td>
+                                <td class="text-center" style="font-weight: bold">Grant Total</td>
+                                <td class="text-right" style="padding-right: 10px; font-weight: bold">@Convert.ToDecimal(grTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</td>
+                            </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center" style="font-weight: bold">Total</td>
+                                            <td class="text-right" style="padding-right: 10px; font-weight: bold">@Convert.ToDecimal(TotalPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</td>
+                                        </tr>
+                                    }
+                        
+                        <tr style="width: 100%;">
+                            <td></td>
+                            <td></td>
+                            <td class="text-center">Delivery Charge</td>
+                            <td class="text-right" style="padding-right: 10px;">৳ @Convert.ToDecimal(Model.DeliveryCharge).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</td>
+                        </tr>
+                         
+
+
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+}
+
+<div style="margin-bottom: 50px"></div>
+
+
+
+@*<div class="chart-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in detailList)
+                                    {
+                                        <tr>
+
+                                            <td>@item.ProductUnit.Product.Name</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Price</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var status = @Session["OrderState"].ToString();
+            $('li').removeClass("active");
+            $(@Session["OrderState"].ToString()).addClass('completed');
+            $(@Session["OrderState"].ToString()).prevAll().addClass("completed");
+            $(@Session["OrderState"].ToString()).nextAll().removeClass("completed");
+        });
+
+     
+    </script>
+}

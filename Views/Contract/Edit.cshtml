@@ -1,0 +1,157 @@
+﻿@using Vereyon.Web
+@model EFreshStore.Models.Context.CorporateContract
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .ui-datepicker-header {
+            color: #3e9aba !important;
+            background-image: none !important;
+            border-radius: 0;
+        }
+
+        #div1 {
+            width: 750px;
+            height: 550px;
+            padding: 50px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #Description, input[type=text] {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border: none;
+            background-color: #f1f1f1;
+            /*background-color: #d2d8e0;*/
+        }
+
+        #Validity {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border: none;
+            background-color: #f1f1f1;
+            /*background-color: #d2d8e0;*/
+        }
+
+
+        input[type=submit] {
+            width: 60%;
+            padding: 15px;
+            color: white;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #ffa726;
+        }
+
+        input[type=submit]:hover {
+            background-color: rgb(60, 125, 201);
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "editCorporateContractform" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h2>Update Corporate Contract</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CompanyName, "Company Name", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.CompanyName)
+                        @Html.ValidationMessageFor(model => model.CompanyName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DiscountPercentage, "Discount Percentage", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.DiscountPercentage)
+                        @Html.ValidationMessageFor(model => model.DiscountPercentage)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Validity, htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Validity)
+                        @Html.ValidationMessageFor(model => model.Validity)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Description)
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" value="Update" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div style="margin-left: 50px; color: red">
+            @Html.ActionLink("Back to List", "Views", "", htmlAttributes: new {@style = "color: red"})
+        </div>
+    </div>
+</div>
+
+    @section scripts{
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+        <script>
+        $(document).ready(function () {
+            $("#editCorporateContractform").validate({
+                rules: {
+                    CompanyName: "required",
+                    DiscountPercentage: "required"
+
+                },
+                messages: {
+                    CompanyName: "Please insert company name",
+                    DiscountPercentage: "Please add a discount"
+                }
+            });
+
+            $('#Validity').datepicker({
+
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "d MM, yy",
+                showAnim: "slide"
+
+            });
+        });
+        </script>
+    }
+</body>
+</html>

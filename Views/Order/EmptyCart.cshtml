@@ -1,0 +1,44 @@
+﻿@using Vereyon.Web
+
+@{
+    ViewBag.Title = "Show Cart Null Message";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+<!-- Main Container -->
+
+<section class="blog_post">
+    <div class="container">
+
+        <!-- row -->
+        <div class="row">
+
+            <!-- Center colunm-->
+            <div class="center_column col-xs-12 col-sm-12" id="center_column">
+                <div class="page-title">
+                </div>
+                <ul class="blog-posts">
+                    <li class="post-item">
+                        <article class="entry">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="entry-thumb">
+                                        <a>
+                                            <figure><img src="~/Content/images/products/EmptyCart.jpg"></figure>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8" style="padding-top: 50px;">
+                                    <h1 class="entry-title">Your cart is empty !</h1>
+                                    <div class="entry-more"> <a href="@Url.Action("Index","Home")" class="button"> Continue Shopping &nbsp; <i class="fa fa-angle-double-right"></i></a> </div>
+                                </div>
+                            </div>
+                        </article>
+                    </li>
+                </ul>
+            </div>
+            <!-- ./ Center colunm -->
+        </div>
+        <!-- ./row-->
+    </div>
+</section>
+<!-- Main Container End -->

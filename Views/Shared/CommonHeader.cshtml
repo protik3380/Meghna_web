@@ -1,0 +1,165 @@
+﻿@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@{
+    if (Request.Cookies["username"] != null)
+    {
+        Session["email"] = Request.Cookies["username"].Value;
+        var x = Session["email"];
+    }
+    if (Request.Cookies["usertypeid"] != null)
+    {
+        Session["UserTypeId"] = Request.Cookies["usertypeid"].Value;
+    }
+    if (Request.Cookies["userid"] != null)
+    {
+        Session["UserId"] = Request.Cookies["userid"].Value;
+    }
+    if (Request.Cookies["discountPercentage"] != null)
+    {
+        Session["discount"] = Request.Cookies["discountPercentage"].Value;
+        var y = Session["discount"];
+    }
+    if (Request.Cookies["AccessToken"] != null)
+    {
+        LoginCredentials loginCredentials = new LoginCredentials
+        {
+            AccessToken = Request.Cookies["AccessToken"].Value,
+            RefreshToken = Request.Cookies["RefreshToken"].Value,
+            TokenType = Request.Cookies["TokenType"].Value,
+            ExpiresIn = Convert.ToInt32(Request.Cookies["ExpiresIn"].Value),
+            Error = Request.Cookies["Error"].Value
+        };
+        Session["userToken"] = loginCredentials;
+    }
+    List<CartView> cartDetails = new List<CartView>();
+    int countItem = 0;
+    decimal discount = 0;
+    string totalAmount = "0";
+    var isLogin = false;
+    if (Session["cartView"] != null)
+    {
+        cartDetails = (List<CartView>)Session["cartView"];
+        ViewBag.cart = cartDetails;
+        countItem = cartDetails.Count;
+        Session["CountItem"] = cartDetails.Count;
+        totalAmount = cartDetails.Sum(c => c.UnitPrice).ToString();
+    }
+    var userName = "";
+    if (Session["email"] != null)
+    {
+        isLogin = true;
+        userName = Session["email"].ToString();
+        discount = Convert.ToDecimal(Session["discount"]);
+    }
+    List<Brand> brands = Dropdown.Brands();
+    List<Category> categories = Dropdown.Categories();
+
+}
+<header class="header-section">
+    <div class="header-top fixed-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 text-left text-lg-left">
+                    <!-- logo -->
+                    <a href="@Url.Action("Index","Home")" class="site-logo">
+                        @*<img src="img/logo.png" alt="">*@
+                        <img src="~/Content/NewContent/images/Logo/logo.png" />
+                    </a>
+                </div>
+                <div class="col-xl-6 col-lg-5 text-center">
+                    <form class="header-search-form" action="@Url.Action("Search", "Home")" method="GET">
+                        <input type="text" class="autocomplete" type="text" id="searchString" name="searchString" placeholder="What are you looking for?">
+                        <button><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                <div class="col-xl-4 col-lg-5 text-right">
+                    <div class="user-panel" style="padding-top: 10px;">
+                        <div class="up-item" id="cart" style="color: #4285F4;">
+                            <div class="shopping-card" id="shoppingCart">
+                                <a  href="@Url.Action("Cart", "Order")" style="color: #4285F4;"><i class="fa fa-shopping-cart"></i></a> &nbsp;
+                                <span id="CartCountItem">@countItem</span>
+                            </div>&nbsp;
+                            @*<a href="@Url.Action("Cart", "Order")" style="color: #4285F4;"> Shopping Cart</a>*@
+                        </div>
+                        @if (isLogin)
+                        {
+                            <div class="up-item">
+                                <ul class="main-menu1">
+                                    <li>
+                                        <i class="fa fa-user" style="color: #4285F4;"></i>
+                                        <a style="color: #4285F4;">@Session["email"]</a>
+                                        <ul class="sub-menu1">
+                                            <li><a href="@Url.Action("ViewUser", "Contract")">My Profile</a></li>
+                                            <li><a href="@Url.Action("MyOrders", "Order")">My Order</a></li>
+                                            <li><a href="@Url.Action("ChangePassword", "Home")">Change Password</a></li>
+                                            <li>
+                                                <a href="@Url.Action("Logout", "Home")">Logout</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="up-item">
+                                @*<i class="fa fa-user" style="color: #4285F4;"></i>
+                                    <a href="@Url.Action("Login", "Home")" style="color: #4285F4;">Login</a>*@
+                                <button class="sign-in-button" onclick="location.href='@Url.Action("Login", "Home")'">Sign in</button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="main-navbar" style="margin-top: 6%; padding-bottom: 0;">
+        <div class="container">
+            <!-- menu -->
+            <ul class="main-menu1">
+                <li><a href="@Url.Action("Index","Home")">Home</a></li>
+                <li>
+                    <a href="">Categories</a>
+                    <ul class="sub-menu1">
+                        @if (categories != null)
+                        {
+                            foreach (var category in categories)
+                            {
+                                <li><a href="@Url.Action("Search", "Home", new {categoryId = category.Id})">@category.Name</a></li>
+                            }
+                        }
+                        @*<li><a href="#">Sneakers</a></li>
+                        <li><a href="#">Sandals</a></li>
+                        <li><a href="#">Formal Shoes</a></li>
+                        <li><a href="#">Boots</a></li>
+                        <li><a href="#">Flip Flops</a></li>*@
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Brands</a>
+                    <ul class="sub-menu1">
+                        @if (brands != null)
+                        {
+                            foreach (var brand in brands)
+                            {
+                                <li><a href="@Url.Action("Search", "Home", new {brandId = brand.Id})">@brand.Name</a></li>
+                            }
+                        }
+                        @*<li><a href="./product.html">Product Page</a></li>
+                        <li><a href="./category.html">Category Page</a></li>
+                        <li><a href="./cart.html">Cart Page</a></li>
+                        <li><a href="./checkout.html">Checkout Page</a></li>
+                        <li><a href="./contact.html">Contact Page</a></li>*@
+                    </ul>
+                </li>
+                <!--<li><a href="#">Blog</a></li>-->
+                <li><a href="@Url.Action("ContactUs","Home")">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+

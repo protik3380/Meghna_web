@@ -1,0 +1,317 @@
+﻿@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.Enum
+@using EFreshStore.Utility
+@using Vereyon.Web
+@model EFreshStore.Models.ViewModels.UpdateProfileVm
+
+@{
+    ViewBag.Title = "EditProfile";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    long userId = Convert.ToInt64(Session["UserId"]);
+    long userTypeId = Convert.ToInt64(Session["userTypeId"]);
+    var isLogin = false;
+    if (Session["email"] != null)
+    {
+        isLogin = true;
+    }
+
+}
+<div id="page">
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul>
+                        <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index", "Home")">Home</a><span>&raquo;</span></li>
+                        <li><strong>Edit Profile</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+    <!-- Main Container -->
+    <section class="main-container col1-layout">
+        <div class="main container">
+            <div class="page-content">
+                <div class="account-login">
+                    <div class="box-authentication">
+
+                        @using (Html.BeginForm("EditProfile", "Contract", null, FormMethod.Post, new {id = "editUserForm"}))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="check-title">
+                                        <h4>Edit Profile</h4>
+                                    </div>
+                                </div>
+                                @if (isLogin)
+                                {
+                                    if (userTypeId == (long) UserTypeEnum.Corporate)
+                                    {
+                                        CorporateUser corporateUser = ApiUtility.GetCorporateUserByUserId(userId);
+                                        List<CorporateDepartment> corporateDepartments = Dropdown.CorporateDepartments();
+                                        List<CorporateDesignation> corporateDesignations = Dropdown.CorporateDesignations();
+                                        <input type="hidden" id="Id" name="Id" value="@corporateUser.Id"/>
+                                        <input type="hidden" id="MobileNo" name="MobileNo" value="@corporateUser.MobileNo"/>
+
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Name<span class="required">*</span></p>
+                                                <input id="Name" name="Name" type="text" class="form-control" required="" value="@corporateUser.Name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Department</p>
+                                                <select id="CorporateDepartmentId" name="CorporateDepartmentId" class="form-control" style="font-size: 15px;">
+                                                    <option value="">--Select Department--</option>
+                                                    @foreach (var item in corporateDepartments)
+                                                    {
+                                                        if(item.Id == corporateUser.CorporateDepartmentId) {
+                                                            <option value="@item.Id" selected="selected">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Designation</p>
+                                                <select id="CorporateDesignationId" name="CorporateDesignationId" class="form-control" style="font-size: 15px;">
+                                                    <option value="">--Select Designation--</option>
+                                                    @foreach (var item in corporateDesignations)
+                                                    {
+                                                        if (item.Id == corporateUser.CorporateDesignationId)
+                                                        {
+                                                            <option value="@item.Id" selected="selected">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Alternative Mobile No</p>
+                                                <input id="AlternativeMobileNo" name="AlternativeMobileNo" type="text" class="form-control" value="@corporateUser.AlternativeMobileNo" placeholder="Alternative Mobile No." maxlength="11">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 1</p>
+                                                <textarea id="DeliveryAddress1" name="DeliveryAddress1" class="form-control" placeholder="Delivery Address 1">@corporateUser.DeliveryAddress1</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 2</p>
+                                                <textarea id="DeliveryAddress2" name="DeliveryAddress2" class="form-control" placeholder="Delivery Address 2">@corporateUser.DeliveryAddress2</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (userTypeId == (long) UserTypeEnum.MeghnaUser)
+                                    {
+                                        MeghnaUser meghnaUser = ApiUtility.GetMeghnaUserByUserId(userId);
+                                        List<MeghnaDepartment> meghnaDepartments = Dropdown.MeghnaDepartments();
+                                        List<MeghnaDesignation> meghnaDesignations = Dropdown.MeghnaDesignations();
+                                        <input type="hidden" id="Id" name="Id" value="@meghnaUser.Id"/>
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Name<span class="required">*</span></p>
+                                                <input id="Name" name="Name" type="text" class="form-control" required="" value="@meghnaUser.Name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div>
+                                                <p style="padding: 15px 0;"> Department</p>
+                                                <select id="MeghnaDepartmentId" name="MeghnaDepartmentId" class="form-control" style="font-size: 15px;">
+                                                    <option value="">--Select Department--</option>
+                                                    @foreach (var item in meghnaDepartments)
+                                                    {
+                                                        if (item.Id == meghnaUser.MeghnaDepartmentId)
+                                                        {
+                                                            <option value="@item.Id" selected="selected">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div>
+                                                <p style="padding: 15px 0;"> Designation</p>
+                                                <select id="MeghnaDesignationId" name="MeghnaDesignationId" class="form-control" style="font-size: 15px;">
+                                                    <option value="">--Select Designation--</option>
+                                                    @foreach (var item in meghnaDesignations)
+                                                    {
+                                                        if (item.Id == meghnaUser.MeghnaDesignationId)
+                                                        {
+                                                            <option value="@item.Id" selected="selected">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Mobile No<span class="required">*</span></p>
+                                                <input id="MobileNo" name="MobileNo" type="text" class="form-control" value="@meghnaUser.MobileNo" placeholder="Mobile No." maxlength="11">
+                                            </div>
+                                        </div> 
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Alternative Mobile No</p>
+                                                <input id="AlternativeMobileNo" name="AlternativeMobileNo" type="text" class="form-control" value="@meghnaUser.AlternativeMobileNo" placeholder="Alternative Mobile No." maxlength="11">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 1</p>
+                                                <textarea id="DeliveryAddress1" name="DeliveryAddress1" class="form-control" placeholder="Delivery Address 1">@meghnaUser.DeliveryAddress1</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 2</p>
+                                                <textarea id="DeliveryAddress2" name="DeliveryAddress2" class="form-control" placeholder="Delivery Address 2">@meghnaUser.DeliveryAddress2</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (userTypeId == (long) UserTypeEnum.Customer)
+                                    {
+                                        Customer customer = ApiUtility.GetCustomerByUserId(userId);
+                                        <input type="hidden" id="Id" name="Id" value="@customer.Id"/>
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Name<span class="required">*</span></p>
+                                                <input id="Name" name="Name" type="text" class="form-control" required="" value="@customer.Name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;"> Mobile No<span class="required">*</span></p>
+                                                <input id="MobileNo" name="MobileNo" type="text" class="form-control" value="@customer.MobileNo" placeholder="Mobile No." maxlength="11">
+                                            </div>
+                                        </div>  
+                                        <div class="col-xs-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Alternative Mobile No</p>
+                                                <input id="AlternativeMobileNo" name="AlternativeMobileNo" type="text" class="form-control" value="@customer.AlternativeMobileNo" placeholder="Alternative Mobile No." maxlength="11">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 1</p>
+                                                <textarea id="DeliveryAddress1" name="DeliveryAddress1" class="form-control" placeholder="Delivery Address 1">@customer.DeliveryAddress1</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-text">
+                                                <p style="padding: 15px 0;">Delivery Address 2</p>
+                                                <textarea id="DeliveryAddress2" name="DeliveryAddress2" class="form-control" placeholder="Delivery Address 2">@customer.DeliveryAddress2</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                <div class="col-xs-12">
+                                    <div class="submit-text" style="float: right">
+                                        <button class="button" name="EditProfile"><span>&nbsp; Update &nbsp;</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main Container End -->
+
+</div>
+@section scripts{
+    <script>
+        jQuery.validator.addMethod("phone", function (phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            return this.optional(element) || phone_number.length > 10 &&
+                phone_number.match(/\+?(88)?01[567893][0-9]{8}\b/);
+        }, "Invalid phone number");
+        $("#editUserForm").validate({
+            rules: {
+                Name: "required",
+                Designation: "required",
+                MobileNo: {
+                    required: true,
+                    phone: true
+                },
+                AlternativeMobileNo: {
+                    phone: true
+                }
+            },
+            messages: {
+                Name: "Please enter your name",
+                Designation: "Please enter your designation",
+                MobileNo: {
+                    required: "Please enter your mobile no",
+                    phone: "Please enter a valid mobile no. Example - 01xxxxxxxxx"
+                } ,
+                AlternativeMobileNo: {
+                    phone: "Please enter a valid mobile no. Example - 01xxxxxxxxx"
+                }
+            }
+        });
+
+        $("#MobileNo").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $("#AlternativeMobileNo").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+    </script>
+}

@@ -1,0 +1,102 @@
+﻿@using Vereyon.Web
+@model EFreshStore.Models.Context.MasterDepot
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/css/form-design.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "masterDepotform"}))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h2>Add Master Depot</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, "Master Depot Name", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Name, new {placeholder = "Enter master depot name"})
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.Address, new {placeholder = "Enter master depot address"})
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ContactPerson, "Contact Person", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.ContactPerson, new {placeholder = "Enter contact person" })
+                        @Html.ValidationMessageFor(model => model.ContactPerson)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, "Phone", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Phone, new {placeholder = "Enter phone number" })
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Email, new {placeholder = "Enter email" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" id="submit" value="Create" class="btn btn-default"/>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div style="margin-left: 50px; color: red">
+            @Html.ActionLink("Back to List", "Index", "", htmlAttributes: new {@style = "color: red"})
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#masterDepotform").validate({
+                rules: {
+                    Name: "required",
+                    Address: "required",
+                    ContactPerson: "required",
+                    Phone: "required",
+
+                },
+                messages: {
+                    Name: "Please type name",
+                    Address: "Please type address",
+                    ContactPerson:"Please type contact person",
+                    Phone:"Please type phone"
+                }
+            });
+        });
+    </script>
+}
+</body>
+</html>

@@ -1,0 +1,728 @@
+﻿@model EFreshStore.Models.Context.ProductUnit
+@using System
+@using System.Collections.Generic
+@using System.Globalization
+@using System.Linq
+@using System.Web.UI.WebControls
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.Enum
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@{
+    ViewBag.Title = "Product details";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    ICollection<RatingVm> ratings = Model.Ratings;
+    var rating = Model.AverageRating > 0 ? Model.AverageRating : 0;
+    var reviewCount = Model.Ratings == null ? 0 : Model.Ratings.Count;
+    List<CartView> cartData = ViewBag.cart;
+    decimal UserDiscount = 0m;
+    double realPrice = 0.0;
+    long userTypeId = 0;
+    var isLogin = false;
+    ProductDiscount productDiscount = ApiUtility.GetProductDiscountByProductUnitID(Model.Id);
+    var SpecificProductDiscount = productDiscount.DiscountPercentage;
+    var distributorPrice = Model.DistributorPricePerCarton / Convert.ToDecimal(Model.CartonSize);
+    decimal discountPrice = UserDiscount / 100;
+    if (Session["email"] != null && @Model.MaximumRetailPrice!=null)
+    {
+        var userId = Convert.ToInt64(Session["UserId"]);
+        userTypeId = Convert.ToInt64(Session["userTypeId"]);
+        isLogin = true;
+
+        if (userTypeId == (long)UserTypeEnum.Corporate)
+        {
+            CorporateUser corporateUsers = (CorporateUser)Session["corporateUser"];
+            UserDiscount = Convert.ToDecimal(Session["discount"]);
+
+            decimal specificDiscount = Convert.ToDecimal(productDiscount.DiscountPercentage);
+            if (specificDiscount > 0 && productDiscount.Validity > DateTime.Now)
+            {
+                if (UserDiscount > specificDiscount)
+                {
+                    realPrice = (double)(@Model.MaximumRetailPrice - ((@Model.MaximumRetailPrice * UserDiscount) / 100));
+                }
+                else
+                {
+                    realPrice = (double)(@Model.MaximumRetailPrice - ((@Model.MaximumRetailPrice * specificDiscount) / 100));
+                }
+            }
+            else if (UserDiscount > 0)
+            {
+                realPrice = (double)(@Model.MaximumRetailPrice - ((@Model.MaximumRetailPrice * UserDiscount) / 100));
+            }
+            else
+            {
+                realPrice = (double)(@Model.MaximumRetailPrice);
+            }
+        }
+
+    }
+    var productImage = Model.ProductImages.FirstOrDefault();    
+}
+<!-- Breadcrumbs -->
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                    <li class=""> <a title="Go to Home Page" href="">Product Details</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<div class="main-container col1-layout">
+    <div class="container">
+        @if (Model.ProductId == null)
+        {
+            <div align="center">
+                <img src="~/Content/images/products/No-Product-Found-new.png" style="height: 40%; width: 40%; padding-left: 50px" />
+                <p style="font-size: 26px; font-weight: bold;padding: 10px">Sorry, no result found!</p>
+                <p style="font-size: 20px; color:grey; padding: 5px">Please try searching for something else</p>
+            </div>
+
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-main">
+                    <div class="product-view-area">
+
+                        <div class="product-big-image col-xs-12 col-sm-5 col-lg-5 col-md-5">
+
+                           
+                            @if (productImage != null)
+                            {
+                                <div class="large-image">
+                                    <a href="@BaseUrl.baseUrl/@Model.ProductImages.FirstOrDefault().ImageLocation" class="cloud-zoom" id="zoom1" rel="useWrapper: false, adjustY:0, adjustX:20"> <img class="zoom-img" src="@BaseUrl.baseUrl/@Model.ProductImages.FirstOrDefault().ImageLocation" alt="products"> </a>                                    
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/products/NoProductImage.png" alt="products">
+                            }
+
+                            <div class="slider-items-products col-md-12">
+                                <div id="thumbnail-slider" class="product-flexslider hidden-buttons product-thumbnail">
+                                    <div class="slider-items slider-width-col3">
+                                        @if (productImage == null)
+                                        {
+                                            <img src="~/Content/images/products/NoProductImage.png" alt="products">
+
+                                        }
+                                        else
+                                        {
+                                            foreach (var image in Model.ProductImages)
+                                            {                                              
+                                                <div class="thumbnail-items">
+                                                    <a href='@BaseUrl.baseUrl/@image.ImageLocation' class='cloud-zoom-gallery' rel="useZoom: 'zoom1', small
+                                                       
+                                                       
+                                                       : '@BaseUrl.baseUrl/@image.ImageLocation' "><img src="@BaseUrl.baseUrl/@image.ImageLocation" alt="Thumbnail" /></a>
+                                                </div>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end: more-images -->
+
+                        <div class="col-xs-12 col-sm-7 col-lg-7 col-md-7 product-details-area">
+                            <div class="product-name">
+                                <h2>@Model.Product.Name</h2>
+                            </div>
+                            <div class="product-name" style="padding-bottom: 10px;">
+                                <h3>@Model.StockKeepingUnit</h3>
+                            </div>
+                            <div class="price-box">
+                                <input type="hidden" id="unitPrice" value="@Model.MaximumRetailPrice" />
+                                @if (SpecificProductDiscount > 0 && productDiscount.Validity > DateTime.Now)
+                                {
+                                    if (isLogin)
+                                    {
+                                        if (userTypeId == (long)UserTypeEnum.Corporate)
+                                        {
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(@realPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                        }
+                                        else if (userTypeId == (long)UserTypeEnum.MeghnaUser)
+                                        {
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(distributorPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                        }
+                                        else
+                                        {
+                                            var maximumRetailprice = (@Model.MaximumRetailPrice - (@SpecificProductDiscount * @Model.MaximumRetailPrice) / 100);
+                                            string price = Convert.ToDecimal(maximumRetailprice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                            @*<h3 style="font-family: 'Roboto', sans-serif;">৳ @price <span style="font-size: 18px"><del style="color: red;"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</del></span></h3>*@
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @price </span> </p>
+                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                        }
+
+                                    }
+                                    else
+                                    {
+
+                                        var maximumRetailprice = (@Model.MaximumRetailPrice - (@SpecificProductDiscount * @Model.MaximumRetailPrice) / 100);
+                                        string price = Convert.ToDecimal(maximumRetailprice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                        @*<h3 style="font-family: 'Roboto', sans-serif;">৳ @price <span style="font-size: 18px"><del style="color: red;"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</del></span></h3>*@
+                                        <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @price </span> </p>
+                                        <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (isLogin)
+                                    {
+                                        if (userTypeId == (long)UserTypeEnum.Corporate)
+                                        {
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(@realPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> &#2547; @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                        }
+                                        else if (userTypeId == (long)UserTypeEnum.MeghnaUser)
+                                        {
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(distributorPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> &#2547; @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</span> </p>
+                                        }
+                                        else
+                                        {
+                                            var maximumRetailprice = (@Model.MaximumRetailPrice - (@SpecificProductDiscount * @Model.MaximumRetailPrice) / 100);
+                                            string price = Convert.ToDecimal(maximumRetailprice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                                            @*<h3 style="font-family: 'Roboto', sans-serif;">৳ @price <span style="font-size: 18px"><del style="color: red;"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</del></span></h3>*@
+                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                            @*<p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>*@
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <p class="special-price"> <span class="price-label">Special Price</span> <span class="price" style="font-size: 23px;color:#2174a9"> ৳ @Convert.ToDecimal(Model.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")) </span> </p>
+                                    }
+                                }
+                            </div>
+                            <div class="ratings">
+                                
+                                <div class="rating"><span class="details-stars">@rating</span></div>
+                                <p class="rating-links"> <a href="#reviews" class="review-link" id="detailsReviewCount">@reviewCount Review(s)</a> <span class="separator">|</span> <a class="review-link" href="#reviews">Add Your Review</a> </p>
+
+                                <p class="availability in-stock pull-right">Availability: <span>In Stock</span></p>
+                            </div>
+                            <div class="short-description">
+                                <h4>Quick Overview</h4>
+                                <p style="white-space: pre-line">@Model.Product.Description</p>                               
+                                <input type="hidden" id="brandName" value="@Model.Product.Brand.Name" />
+                                <input type="hidden" id="categoryName" value="@Model.Product.Category.Name" />
+                                <input type="hidden" id="pTypeId" value="@Model.Product.Category.ProductTypeId" />
+                                <input type="hidden" id="distributorPrice" value="@distributorPrice" />
+                                <input type="hidden" id="productUnitId" value="@Model.Id" />
+                                <input type="hidden" id="productId" value="@Model.ProductId" />
+                                <input type="hidden" id="productName" value="@Model.Product.Name" />
+                                @if (productImage != null)
+                                {
+                                <input type="hidden" id="Image" value="@Model.ProductImages.FirstOrDefault().ImageLocation"/>
+                                }
+                                @if (@userTypeId == (long)UserTypeEnum.Corporate)
+                                {
+                                    <input type="hidden" id="discountPrice" value="@realPrice" />
+                                }
+                                else if (@userTypeId == (long)UserTypeEnum.MeghnaUser)
+                                {
+                                    <input type="hidden" id="discountPrice" value="@distributorPrice" />
+                                }
+                                else
+                                {
+                                    decimal specificDiscount = Convert.ToDecimal(productDiscount.DiscountPercentage);
+                                    if (specificDiscount > 0 && productDiscount.Validity > DateTime.Now)
+                                    {
+                                        var productPrice = (double)(@Model.MaximumRetailPrice - ((@Model.MaximumRetailPrice * specificDiscount) / 100));
+                                        <input type="hidden" id="discountPrice" value="@productPrice" />
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" id="discountPrice" value="@Model.MaximumRetailPrice" />
+                                    }
+                                }
+
+
+
+                            </div>
+                            <div class="product-variation">
+                                <form action="#" method="post">
+                                    <div class="cart-plus-minus">
+                                        <label for="qty">Quantity:</label>
+                                        <div class="numbers-row">
+                                            <div class="dec qtybutton btn-number" data-type="minus" data-field="quant[1]">
+                                                <i class="fa fa-minus">&nbsp;</i>
+                                            </div>
+                                            <input type="text" onchange="UpdateQty(@Model.Id)" class="qty input-number" title="Qty" value="1" min="1" max="100" maxlength="12" id="quantity" name="quant[1]">
+                                            <div class="inc qtybutton btn-number" data-type="plus" data-field="quant[1]">
+                                                <i class="fa fa-plus">&nbsp;</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button id="addToCart" class="button pro-add-to-cart" title="Add to Cart" type="button"><span><i class="fa fa-shopping-cart"></i> Add to Cart</span></button>
+                                </form>
+                            </div>
+                            <div class="product-cart-option">
+                                <ul>
+                                    <li><a onclick="addProductToWishList(@Model.Id)" role="button" id="productDetailsWishList_@Model.Id">
+                                        @if (Model.ExistsInWishList)
+                                        {
+                                            <i class="fa fa-heart" style="color: red"></i><span>Added to Wishlist</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-heart"></i><span>Add to Wishlist</span>
+                                        }
+                                    </a></li>
+                                    @*<li><a href="#"><i class="fa fa-retweet"></i><span>Add to Compare</span></a></li>
+                                    <li><a href="#"><i class="fa fa-envelope"></i><span>Email to a Friend</span></a></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-overview-tab">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="product-tab-inner">
+                                    <ul id="product-detail-tab" class="nav nav-tabs product-tabs">
+                                        <li class="active"> <a href="#description" data-toggle="tab"> Description </a> </li>
+                                        <li> <a href="#reviews" data-toggle="tab">Reviews</a> </li>
+                                        @*<li><a href="#product_tags" data-toggle="tab">Tags</a></li>
+                                        <li> <a href="#custom_tabs" data-toggle="tab">Custom Tab</a> </li>*@
+                                    </ul>
+                                    <div id="productTabContent" class="tab-content">
+                                        <div class="tab-pane fade in active" id="description">
+                                            <div class="std">
+                                                <p style="white-space: pre-line">
+                                                    @Model.Product.Description
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div id="reviews" class="tab-pane fade">
+                                            <div class="col-sm-5 col-lg-5 col-md-5">
+                                                <div class="reviews-content-left">
+                                                    <h2 id="reviewsHeading">Customer Reviews</h2>
+                                                    @if (ratings != null)
+                                                    {
+                                                        foreach (RatingVm ratingVm in ratings)
+                                                        {
+                                                            <div class="review-ratting" id="review_@ratingVm.UserId">
+                                                                @*   <div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div>*@
+                                                                <div class="rating">
+                                                                    @for (int i = 0; i < 5; i++)
+                                                                    {
+                                                                        if (i < ratingVm.Rating1)
+                                                                        {
+                                                                            <i class="fa fa-star"></i>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <i class="fa fa-star-o"></i>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                                <p class="author"> @ratingVm.UserName<small> (Posted on @ratingVm.RatingTime.ToString("d"))</small> </p>
+                                                                <p>@ratingVm.Review</p>
+
+                                                                <hr />
+
+
+                                                            </div>
+                                                        }
+                                                        
+                                                    }
+                                                    
+                                                    
+                                                    @if (ratings == null)
+                                                    {
+                                                        <p>This product has no reviews.</p>
+                                                    }
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7 col-lg-7 col-md-7">
+                                                <div class="reviews-content-right">
+                                                    <h2>Write Your Own Review</h2>
+                                                    @using (Html.BeginForm("Create", "Rating", FormMethod.Post, new { id = "reviewForm" }))
+                                                    {
+                                                        <h3>You're reviewing: <span>@Model.Product.Name</span></h3>
+                                                        <h4>How do you rate this product?<em>*</em></h4>
+                                                        <div class="table-responsive reviews-table">
+                                                            <table>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <th>1 star</th>
+                                                                    <th>2 star</th>
+                                                                    <th>3 star</th>
+                                                                    <th>4 star</th>
+                                                                    <th>5 star</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><input type="radio" name="rating1" value="1"></td>
+                                                                    <td><input type="radio" name="rating1" value="2"></td>
+                                                                    <td><input type="radio" name="rating1" value="3"></td>
+                                                                    <td><input type="radio" name="rating1" value="4"></td>
+                                                                    <td><input type="radio" name="rating1" value="5"></td>
+                                                                </tr>
+                                                                
+                                                                </tbody>
+                                                            </table>
+                                                            <label id="errorRow"></label>
+                                                        </div>
+                                                        <div class="form-area">
+                                                            <div class="form-selector">
+                                                                <label for="review">Review </label>
+                                                                <textarea class="form-control input-sm" rows="4" id="review" name="review"></textarea>
+                                                                <input type="hidden" id="productUnitId" name="productUnitId" value="@Model.Id" />
+                                                            </div>
+                                                            
+                                                            <div class="buttons-set">
+                                                                <button class="button submit" id="reviewButton" title="Submit Review" type="submit"><span>Review</span></button>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="tab-pane fade" id="product_tags">
+                                            <div class="box-collateral box-tags">
+                                                <div class="tags">
+                                                    <form id="addTagForm" action="#" method="get">
+                                                        <div class="form-add-tags">
+                                                            <div class="input-box">
+                                                                <label for="productTagName">Add Your Tags:</label>
+                                                                <input class="input-text" name="productTagName" id="productTagName" type="text">
+                                                                <button type="button" title="Add Tags" class="button add-tags"><i class="fa fa-plus"></i> &nbsp;<span>Add Tags</span> </button>
+                                                            </div>
+                                                            <!--input-box-->
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <!--tags-->
+                                                <p class="note">Use spaces to separate tags. Use single quotes (') for phrases.</p>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom_tabs">
+                                            <div class="product-tabs-content-inner clearfix">
+                                                <p>
+                                                    <strong>Lorem Ipsum</strong><span>
+                                                        &nbsp;is
+                                                        simply dummy text of the printing and typesetting industry. Lorem Ipsum
+                                                        has been the industry's standard dummy text ever since the 1500s, when
+                                                        an unknown printer took a galley of type and scrambled it to make a type
+                                                        speciMen book. It has survived not only five centuries, but also the
+                                                        leap into electronic typesetting, remaining essentially unchanged. It
+                                                        was popularised in the 1960s with the release of Letraset sheets
+                                                        containing Lorem Ipsum passages, and more recently with desktop
+                                                        publishing software like Aldus PageMaker including versions of Lorem
+                                                        Ipsum.
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<!-- Main Container End -->
+
+@section scripts{
+<script src="~/Content/js/cloud-zoom.js"></script>
+    <script>
+        $(document).ready(function() {
+            //Update Quantity from cart
+            $("#pQuantity").change(function() {
+                var qty = $('#pQuantity').val();
+                alert(qty);
+                $.ajax({
+                    type: "POST",
+                    url: "../Product/UpdateQuantity",
+                    data: {
+                        quantity: qty
+                    },
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function() {
+                        var url = '../Product/Details?ProductId=' + @Model.ProductId;
+                        window.location.href = url;
+                    }
+                });
+            });
+            @*function addItemToCart(productUnitId, productName, quantity, unitPrice, image) {
+                var getProduct = {};
+                var productUnit = {};
+
+                getProduct.Name = productName;
+                getProduct.unitPrice = unitPrice;
+                productUnit.Product = getProduct;
+                var product = {};
+                product.ProductUnit = productUnit;
+                product.ProductUnitId = productUnitId;
+                product.Quantity = parseInt(quantity);
+                product.Price = parseFloat(unitPrice) * parseInt(quantity);
+
+                var postData = { details: product, image: image }
+                $.ajax({
+                    type: "POST",
+                    url: "../Product/GetCartData",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    crossDomain: true,
+                         success: function (data) {
+                             if(data.length === 0)
+                             {
+                                 $('#CartCountItem').empty();
+                                 $("#cartModalData").empty();
+                                 $('#subTotal').empty();
+                                 $('#totalCartItems').empty();
+                             }
+                             else{
+                                 var count = data.length;
+                                 $('#CartCountItem').append('<span class="cart-num">'+count+'</span>');
+                                 var subtotal = 0.0;
+                                 $('#totalCartItems').append(count+ ' items in your cart');
+                                 $.each(data, function(key, value) {
+                                     subtotal += value.DiscountPrice;
+                                     var price = value.DiscountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                     $('#cartModalData').append('<li><div class="cart-product"><a href="#" class="cart-pr-thumb bg-image"><img src="'+'@BaseUrl.baseUrl/' + value.Image + '" alt="No Image" width="65"></a><div class="cart-pr-info"><a href="#" class="cart-pr-title">' + value.ProductName + '</a><div class="cart-pr-price">৳ ' + price + '</div><div class="cart-pr-quantity">Quantity: <span>'+ value.Quantity +'</span></div></div><a onclick="DeleteFromCart('+ value.ProductUnitId +')" class="cart-pr-remove" title="Remove from cart">×</a></div></li>');
+
+                                 });
+                                 var total = subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                 $('#subTotal').append('৳ '+total);
+                             }
+                }
+                });
+            }*@
+
+
+            $("#addToCart").click(function() {
+                var productUnitId = $('#productUnitId').val();
+                var productName = $('#productName').val();
+                var unitPrice = $('#unitPrice').val();
+                var quantity = $('#quantity').val();
+                if (quantity === null || quantity ==="") {
+                    $('#quantity').val(1);
+                    toastr.error("Quantity feild cannot be empty");
+                    return false;
+                }
+                else if (quantity === "0") {
+                    $('#quantity').val(1);
+                    toastr.error("Quantity must be greater than 0");
+                    return false;
+                }
+                var image = $('#Image').val();
+                var discountPrice = $('#discountPrice').val() * quantity;
+                var distributorPrice = $('#distributorPrice').val();
+                var brandName = $('#brandName').val();
+                var categoryName = $('#categoryName').val();
+                var pTypeId = $('#pTypeId').val();
+                addItemToCart(productUnitId,pTypeId,
+                    productName,
+                    quantity,
+                    unitPrice,
+                    image,
+                    discountPrice,
+                    distributorPrice,
+                    brandName,
+                    categoryName);
+            });
+        });
+
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+
+            var fieldName = $(this).attr('data-field');
+            var type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            if (!isNaN(currentVal)) {
+                if (type === 'minus') {
+
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if (parseInt(input.val()) === input.attr('min')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                } else if (type === 'plus') {
+
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if (parseInt(input.val()) === input.attr('max')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                }
+            } else {
+                input.val(1);
+            }
+        });
+        $('.input-number').focusin(function() {
+            $(this).data('oldValue', $(this).val());
+        });
+        $('.input-number').change(function() {
+            document.getElementById("limitMessage").innerHTML = "";
+            var minValue = parseInt($(this).attr('min'));
+            var maxValue = parseInt($(this).attr('max'));
+            var valueCurrent = parseInt($(this).val());
+
+            var name = $(this).attr('name');
+            if (valueCurrent >= minValue) {
+                $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
+            } else {
+                document.getElementById("limitMessage").innerHTML = "Product quantity should not be less than 1";
+                //alert('Product quantity should not be less than 1');
+                $(this).val($(this).data('oldValue'));
+                delay(300);
+            }
+            if (valueCurrent <= maxValue) {
+                $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled');
+            } else {
+                //alert('Product quantity should not be greater than 1000');
+                document.getElementById("limitMessage").innerHTML = "Product quantity should not be greater than 100";
+                $(this).val($(this).data('oldValue'));
+            }
+
+
+        });
+        $(".input-number").keydown(function(e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $(document).ready(function() {
+
+            $("#reviewForm").validate({
+                errorPlacement: function(error, element) {
+                    error.appendTo('#errorRow');
+                },
+                rules: {
+                    rating1: "required"
+                },
+                messages: {
+                    rating1: {
+                        required: "Please select your rating"
+                    }
+
+                },
+                submitHandler: function(form, e) {
+                    e.preventDefault();
+                    var rating = $("input[name='rating1']:checked").val();
+                    $("input[name='rating1']").prop("checked", false);
+
+                    var productUnitId = $("input#productUnitId").val();
+                    var review = $("textarea#review").val();
+                    $("textarea#review").val("");
+                    var dataString = 'rating1=' + rating + '&productUnitId=' + productUnitId + '&review=' + review;
+                    //console.log(dataString);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("CreateReview", "Rating")',
+                        data: dataString,
+                        success: function(data) {
+                            toastr.clear();
+                            if (data.status == "UnAuthorized") {
+                                toastr.error("You must login to review this product");
+                            } else if (data.status == "Created" || data.status == "Ok" ) {
+                                var starWidth = 16;
+                                //$(".rating").html('<span class="details-stars"><span style="width: ' + (Math.max(0, (Math.min(5, parseFloat(data.averageRating)))) * starWidth).toFixed(2) + 'px;"></span></span>');
+                                $(".details-stars").html('<span style="width: ' + (Math.max(0, (Math.min(5, parseFloat(data.averageRating)))) * starWidth).toFixed(2) + 'px;"></span>');
+                                $("#detailsReviewCount").html(data.ratingCount + ' Review(s)');
+                                if (data.status == "Created") {
+                                    toastr.success("Rating added successfully");
+                                }
+
+                                if (data.status == "Ok") {
+                                    $("#review_" + data.reviewDetails.UserId).remove();
+                                    toastr.success("Rating updated successfully");
+                                }
+
+                                if (data.reviewDetails != null) {
+                                    if ($('#reviewsHeading').siblings('p').length !== 0) {
+                                        $('#reviewsHeading').siblings('p').remove();
+                                    }
+                                    var name = data.reviewDetails.UserName;
+                                    var currentDt = new Date();
+                                    var mm = currentDt.getMonth() + 1;
+                                    var dd = currentDt.getDate();
+                                    var yyyy = currentDt.getFullYear();
+                                    var ratingTime = mm + '/' + dd + '/' + yyyy;
+                                    var starRating = '';
+                                    for (var i = 0; i < 5; i++) {
+                                        if (i < rating) {
+                                            starRating += '<i class="fa fa-star"></i> ';
+                                        }else {
+                                            starRating += '<i class="fa fa-star-o"></i> ';
+                                        }
+                                    }
+
+                                    $("#reviewsHeading")
+                                        .after(
+                                            '<div class="review-ratting" id="review_'+data.reviewDetails.UserId+'"><div class="rating">'+starRating+'</div><p class="author"> ' +
+                                            name + '<small> (Posted on ' +ratingTime +')</small></p><p>'+ review +' </p><hr/></div >');
+                                }
+
+                            } else if (data.status == "Failed") {
+                                toastr.error("Something went wrong");
+                            }
+                        }
+                    });
+                    return false;
+
+                }
+
+            });
+
+
+            //$("#reviewForm").submit(function() {
+            //    var rating = $("input[name='rating1']:checked").val();
+            //    if(!rating) {
+            //        toastr.error("You must a select a rating");
+            //    }
+
+            //});
+
+            //$("#reviewButton").prop("disabled", true);
+            //$("input:radio").change(function () {$("#reviewButton").prop("disabled", false);});
+
+        });
+    </script>
+}
+

@@ -1,0 +1,60 @@
+﻿@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.ProductUnit>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    List<ProductUnit> productUnits = ViewBag.productUnits;
+}
+
+
+<div class="chart-area">
+    <div class="container">
+        @Html.RenderFlashMessages()
+        <h2>Product Unit Details</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Stock Keeping Unit</th>
+                                        <th>Carton Size</th>
+                                        <th>Distributor Price Per Carton</th>
+                                        <th>Trade Price Per Carton</th>
+                                        <th>Maximum Retail Price</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var productUnit in productUnits)
+                                        {
+                                            <tr>
+                                                <td>@productUnit.Product.Name</td>
+                                                <td>@productUnit.StockKeepingUnit</td>
+                                                <td>@productUnit.CartonSize</td>
+                                                <td>@productUnit.DistributorPricePerCarton</td>
+                                                <td>@productUnit.TradePricePerCarton</td>
+                                                <td>@productUnit.MaximumRetailPrice</td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "EditDetails", new { id = productUnit.Id }, htmlAttributes: new { @style = "color: red" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

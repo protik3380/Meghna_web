@@ -1,0 +1,158 @@
+﻿@using System.Globalization
+@using EFreshStore.Models.Context
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@using Vereyon.Web
+@*@order Order*@
+
+@{
+    ViewBag.Title = "Order Confirmation View";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    decimal grandTotal = 0;
+    decimal couponDiscount = 0;
+    var order = (Order)Session["placedOrder"];
+    if (order != null)
+    {
+
+        //grandTotal = Convert.ToDecimal(order.OrderDetails.Sum(x => x.Price));
+        grandTotal = (decimal)Session["GrandTotal"];
+        grandTotal = order.CouponDiscount != null ? grandTotal - Convert.ToDecimal(order.CouponDiscount) : grandTotal;
+    }
+}
+
+<!-- Breadcrumbs -->
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                    <li><strong>Confirm order </strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Sitemap  -->
+
+@if (Session["placedOrder"] != null)
+{
+    <section class="container">
+
+        <div class="sitemap-page">
+            <div class="page-title" align="center" style="padding-bottom: 50px;">
+                <h2>Thank you for shopping</h2>
+
+                @*<h2>Congratulations!</h2>*@
+                <h3>Your order placed successfully!</h3>
+                <h4>Order No: @order.OrderNo</h4>
+            </div>
+            <div class="col-xs-12 col-sm-1 col-md-1 col-lg-1">
+
+            </div>
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5" align="right">
+                <img class="img-responsive animate scale" src="~/Content/images/products/pending-product.jpg" alt="">
+            </div>
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+
+                <table style="width: 100%;font-size: 16px;">
+                    <tr style="width: 100%;">
+                        <td style="width: 32%;"><a style="font-size: 16px;">Delivery Address</a></td>
+                        <td style="width: 68%;"><a>@order.DeliveryAddress</a></td>
+                    </tr>
+                    <tr>
+                        <td><hr /></td>
+                        <td><hr /></td>
+                    </tr>
+                    <tr style="width: 100%;">
+                        <td style="width: 32%;"><a style="font-size: 16px;">Order Time</a></td>
+                        <td style="width: 68%;"><a>@order.OrderDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</a></td>
+                    </tr>
+                    <tr>
+                        <td><hr /></td>
+                        <td><hr /></td>
+                    </tr>
+
+                    <tr style="width: 100%;">
+                        <td style="width: 32%;"><a style="font-size: 16px;">Grand Total</a></td>
+                        <td style="width: 68%;"><a>৳ @Convert.ToDecimal(grandTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</a></td>
+                    </tr>
+
+
+                    <tr>
+                        <td><hr /></td>
+                        <td><hr /></td>
+                    </tr>
+                    <tr style="width: 100%;">
+                        <td style="width: 32%;"><a style="font-size: 16px;">Delivery Charge</a></td>
+                        <td style="width: 68%;"><a>৳ @Convert.ToDecimal(order.DeliveryCharge).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</a></td>
+                    </tr>
+
+
+                </table>
+                <tr>
+                    <td>
+                        <hr />
+                    </td>
+                    <td></td>
+                </tr>
+                @*<ul class="simple-list arrow-list bold-list">
+                        <li>
+                            <a>Delivery Address</a>
+                            <ul>
+                                <li><a>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;</i>@placedOrder.DeliveryAddress</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <ul class="simple-list arrow-list bold-list">
+                        <li>
+                            <a>Order time</a>
+                            <ul>
+                                <li><a>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;</i>@placedOrder.OrderDate.Value.ToString("dd-MMM-yyyy")</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <ul class="simple-list arrow-list bold-list">
+                        <li>
+                            <a>Sub Total</a><a style="text-align: right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;</i>৳ @Convert.ToDecimal(SubTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</a>
+                        </li>
+
+                    </ul>
+                    <ul class="simple-list arrow-list bold-list">
+                        <li>
+                            <a>Discount</a><a style="text-align: right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;</i>৳ @Convert.ToDecimal(Discount).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</a>
+                        </li>
+
+                    </ul>
+                    <ul class="simple-list arrow-list bold-list">
+                        <li>
+                            @{
+                                var grndTotal = Convert.ToDecimal(GrandTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"));
+                            }
+                            <a>Grand Total</a><a style="text-align: right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;</i>৳ @Convert.ToDecimal(GrandTotal).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))</a>
+                        </li>
+
+                    </ul>*@
+            </div>
+            <div class="col-xs-12 col-sm-1 col-md-1 col-lg-1">
+
+            </div>
+        </div>
+
+    </section>
+}
+else
+{
+    <section class="container">
+        <div class="sitemap-page">
+            <div class="page-title" align="center" style="padding-bottom: 50px;">
+                <h2>Something went wrong!</h2>
+
+            </div>
+        </div>
+    </section>
+}

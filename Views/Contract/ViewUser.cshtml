@@ -1,0 +1,65 @@
+﻿@using System.Web.UI.WebControls
+@using EFreshStore.Models.Context
+@using EFreshStore.Models
+@using EFreshStore.Models.Enum
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Utility
+@using Microsoft.Ajax.Utilities
+@using Vereyon.Web
+@model EFreshStore.Models.Context.CorporateUser
+﻿@using EFreshStore.Models.Context
+@{
+    Layout = "~/Views/Shared/_Master.cshtml";
+    long userId =  Convert.ToInt64(Session["UserId"]);
+    long userTypeId = Convert.ToInt64(Session["userTypeId"]);
+
+    ViewBag.Title = "View User";
+    var Name = "";
+    var Mobile_No = "";
+    var Email_Address = "";
+    var Designation = "";
+    var userName = "";
+    var password = "";
+    long id = 0;
+    
+}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<body>
+    <form>
+        <div class="container">
+            @if (userTypeId == (long)UserTypeEnum.Corporate)
+            {
+                @Html.Partial("~/Views/Shared/Profile/_CorporateUserPartial.cshtml", ApiUtility.GetCorporateUserByUserId(userId))
+                ;
+            }
+            @if (userTypeId == (long)UserTypeEnum.MeghnaUser)
+            {
+                @Html.Partial("~/Views/Shared/Profile/_MeghnaUserPartial.cshtml", ApiUtility.GetMeghnaUserByUserId(userId))
+                ;
+            }
+            @if (userTypeId == (long)UserTypeEnum.Customer)
+            {
+                @Html.Partial("~/Views/Shared/Profile/_CustomerPartial.cshtml", ApiUtility.GetCustomerByUserId(userId))
+                ;
+            }
+        </div>
+    </form>
+<div style="margin-bottom: 450px"></div>
+    @section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#viewProfile').addClass('active');
+        $(function() {
+            setTimeout(function() {
+                $("#mgs").hide('blind', {}, 500);
+            }, 5000);
+        });
+    });
+    </script>
+    }
+
+</body>

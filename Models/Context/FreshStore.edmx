@@ -1,0 +1,2054 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EFreshStore.Models.Context.EntityModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CorporateContract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DiscountPercentage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Validity" Type="datetime" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CorporateUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="50" />
+          <Property Name="CorporateContractId" Type="bigint" />
+          <Property Name="DeliveryAddress1" Type="varchar" MaxLength="500" />
+          <Property Name="DeliveryAddress2" Type="varchar" MaxLength="500" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="MobileNo" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DeliveryAddress1" Type="varchar" MaxLength="500" />
+          <Property Name="DeliveryAddress2" Type="varchar" MaxLength="500" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Distributor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="MasterDepotId" Type="bigint" />
+          <Property Name="ThanaId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="DistributorProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DistributorId" Type="bigint" />
+          <Property Name="ProductLineId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MasterDepot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="UserId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="MasterDepotProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasterDepotId" Type="bigint" />
+          <Property Name="ProductLineId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="MeghnaUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="50" />
+          <Property Name="DeliveryAddress1" Type="varchar" MaxLength="500" />
+          <Property Name="DeliveryAddress2" Type="varchar" MaxLength="500" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNo" Type="varchar" MaxLength="50" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="ThanaId" Type="bigint" />
+          <Property Name="MasterDepotId" Type="bigint" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="OrderStateId" Type="bigint" />
+          <Property Name="OrderRejectId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="bigint" />
+          <Property Name="ProductUnitId" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PacketQuantity" Type="int" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CategoryId" Type="bigint" />
+          <Property Name="BrandId" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImageLocation" Type="nvarchar(max)" />
+          <Property Name="ProductUnitId" Type="bigint" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ProductLineDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductLineId" Type="bigint" />
+          <Property Name="ProductId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="ProductUnit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" />
+          <Property Name="StockKeepingUnit" Type="varchar" MaxLength="50" />
+          <Property Name="CartonSize" Type="varchar" MaxLength="50" />
+          <Property Name="DistributorPricePerCarton" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TradePricePerCarton" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MaximumRetailPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EffectiveDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProductUnitPrice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductUnitId" Type="bigint" />
+          <Property Name="DistributorPricePerCarton" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TradePricePerCarton" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MaximumRetailPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Thana">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="DistrictId" Type="bigint" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ThanaWiseMasterDepot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasterDepotId" Type="bigint" />
+          <Property Name="ThanaId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="UserTypeId" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="WishList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="ProductUnitId" Type="bigint" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="AddedOn" Type="datetime" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_CorporateUser_CorporateContract">
+          <End Role="CorporateContract" Type="Self.CorporateContract" Multiplicity="0..1" />
+          <End Role="CorporateUser" Type="Self.CorporateUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CorporateContract">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CorporateUser">
+              <PropertyRef Name="CorporateContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CorporateUser_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="CorporateUser" Type="Self.CorporateUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CorporateUser">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Distributor_MasterDepot">
+          <End Role="MasterDepot" Type="Self.MasterDepot" Multiplicity="0..1" />
+          <End Role="Distributor" Type="Self.Distributor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Distributor">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Distributor_Thana">
+          <End Role="Thana" Type="Self.Thana" Multiplicity="0..1" />
+          <End Role="Distributor" Type="Self.Distributor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Distributor">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributorProductLine_Distributor">
+          <End Role="Distributor" Type="Self.Distributor" Multiplicity="0..1" />
+          <End Role="DistributorProductLine" Type="Self.DistributorProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Distributor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DistributorProductLine">
+              <PropertyRef Name="DistributorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributorProductLine_ProductLine">
+          <End Role="ProductLine" Type="Self.ProductLine" Multiplicity="0..1" />
+          <End Role="DistributorProductLine" Type="Self.DistributorProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DistributorProductLine">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterDepot_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="MasterDepot" Type="Self.MasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepot">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterDepotProductLine_MasterDepot">
+          <End Role="MasterDepot" Type="Self.MasterDepot" Multiplicity="0..1" />
+          <End Role="MasterDepotProductLine" Type="Self.MasterDepotProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepotProductLine">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterDepotProductLine_ProductLine">
+          <End Role="ProductLine" Type="Self.ProductLine" Multiplicity="0..1" />
+          <End Role="MasterDepotProductLine" Type="Self.MasterDepotProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepotProductLine">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeghnaUser_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="MeghnaUser" Type="Self.MeghnaUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeghnaUser">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_MasterDepot">
+          <End Role="MasterDepot" Type="Self.MasterDepot" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Thana">
+          <End Role="Thana" Type="Self.Thana" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_ProductUnit">
+          <End Role="ProductUnit" Type="Self.ProductUnit" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BrandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_ProductUnit">
+          <End Role="ProductUnit" Type="Self.ProductUnit" Multiplicity="0..1" />
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductLineDetails_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="ProductLineDetails" Type="Self.ProductLineDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductLineDetails">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductLineDetails_ProductLine">
+          <End Role="ProductLine" Type="Self.ProductLine" Multiplicity="0..1" />
+          <End Role="ProductLineDetails" Type="Self.ProductLineDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductLineDetails">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductUnit_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="ProductUnit" Type="Self.ProductUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductUnit">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductUnitPrice_ProductUnit">
+          <End Role="ProductUnit" Type="Self.ProductUnit" Multiplicity="0..1" />
+          <End Role="ProductUnitPrice" Type="Self.ProductUnitPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductUnitPrice">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Thana_District">
+          <End Role="District" Type="Self.District" Multiplicity="0..1" />
+          <End Role="Thana" Type="Self.Thana" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="District">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Thana">
+              <PropertyRef Name="DistrictId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanaWiseMasterDepot_MasterDepot">
+          <End Role="MasterDepot" Type="Self.MasterDepot" Multiplicity="0..1" />
+          <End Role="ThanaWiseMasterDepot" Type="Self.ThanaWiseMasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ThanaWiseMasterDepot">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanaWiseMasterDepot_Thana">
+          <End Role="Thana" Type="Self.Thana" Multiplicity="0..1" />
+          <End Role="ThanaWiseMasterDepot" Type="Self.ThanaWiseMasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ThanaWiseMasterDepot">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserType">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishList_ProductUnit">
+          <End Role="ProductUnit" Type="Self.ProductUnit" Multiplicity="1" />
+          <End Role="WishList" Type="Self.WishList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishList">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishList_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="WishList" Type="Self.WishList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishList">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EFreshStoreModelsContextEntityModelsStoreContainer">
+          <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CorporateContract" EntityType="Self.CorporateContract" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CorporateUser" EntityType="Self.CorporateUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Distributor" EntityType="Self.Distributor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DistributorProductLine" EntityType="Self.DistributorProductLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MasterDepot" EntityType="Self.MasterDepot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MasterDepotProductLine" EntityType="Self.MasterDepotProductLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeghnaUser" EntityType="Self.MeghnaUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductLine" EntityType="Self.ProductLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductLineDetails" EntityType="Self.ProductLineDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductUnit" EntityType="Self.ProductUnit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductUnitPrice" EntityType="Self.ProductUnitPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Thana" EntityType="Self.Thana" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanaWiseMasterDepot" EntityType="Self.ThanaWiseMasterDepot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WishList" EntityType="Self.WishList" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CorporateUser_CorporateContract" Association="Self.FK_CorporateUser_CorporateContract">
+            <End Role="CorporateContract" EntitySet="CorporateContract" />
+            <End Role="CorporateUser" EntitySet="CorporateUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CorporateUser_User" Association="Self.FK_CorporateUser_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="CorporateUser" EntitySet="CorporateUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Distributor_MasterDepot" Association="Self.FK_Distributor_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepot" />
+            <End Role="Distributor" EntitySet="Distributor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Distributor_Thana" Association="Self.FK_Distributor_Thana">
+            <End Role="Thana" EntitySet="Thana" />
+            <End Role="Distributor" EntitySet="Distributor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributorProductLine_Distributor" Association="Self.FK_DistributorProductLine_Distributor">
+            <End Role="Distributor" EntitySet="Distributor" />
+            <End Role="DistributorProductLine" EntitySet="DistributorProductLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributorProductLine_ProductLine" Association="Self.FK_DistributorProductLine_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLine" />
+            <End Role="DistributorProductLine" EntitySet="DistributorProductLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterDepot_User" Association="Self.FK_MasterDepot_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="MasterDepot" EntitySet="MasterDepot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterDepotProductLine_MasterDepot" Association="Self.FK_MasterDepotProductLine_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepot" />
+            <End Role="MasterDepotProductLine" EntitySet="MasterDepotProductLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterDepotProductLine_ProductLine" Association="Self.FK_MasterDepotProductLine_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLine" />
+            <End Role="MasterDepotProductLine" EntitySet="MasterDepotProductLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeghnaUser_User" Association="Self.FK_MeghnaUser_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="MeghnaUser" EntitySet="MeghnaUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_MasterDepot" Association="Self.FK_Order_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepot" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Thana" Association="Self.FK_Order_Thana">
+            <End Role="Thana" EntitySet="Thana" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Order" Association="Self.FK_OrderDetails_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_ProductUnit" Association="Self.FK_OrderDetails_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnit" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Brand" Association="Self.FK_Product_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_ProductUnit" Association="Self.FK_ProductImage_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnit" />
+            <End Role="ProductImage" EntitySet="ProductImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductLineDetails_Product" Association="Self.FK_ProductLineDetails_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductLineDetails" EntitySet="ProductLineDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductLineDetails_ProductLine" Association="Self.FK_ProductLineDetails_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLine" />
+            <End Role="ProductLineDetails" EntitySet="ProductLineDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductUnit_Product" Association="Self.FK_ProductUnit_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductUnit" EntitySet="ProductUnit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductUnitPrice_ProductUnit" Association="Self.FK_ProductUnitPrice_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnit" />
+            <End Role="ProductUnitPrice" EntitySet="ProductUnitPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Thana_District" Association="Self.FK_Thana_District">
+            <End Role="District" EntitySet="District" />
+            <End Role="Thana" EntitySet="Thana" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanaWiseMasterDepot_MasterDepot" Association="Self.FK_ThanaWiseMasterDepot_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepot" />
+            <End Role="ThanaWiseMasterDepot" EntitySet="ThanaWiseMasterDepot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanaWiseMasterDepot_Thana" Association="Self.FK_ThanaWiseMasterDepot_Thana">
+            <End Role="Thana" EntitySet="Thana" />
+            <End Role="ThanaWiseMasterDepot" EntitySet="ThanaWiseMasterDepot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserType" Association="Self.FK_User_UserType">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishList_ProductUnit" Association="Self.FK_WishList_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnit" />
+            <End Role="WishList" EntitySet="WishList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishList_User" Association="Self.FK_WishList_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="WishList" EntitySet="WishList" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EFreshStore.Models.Context.EntityModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FreshContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Brands" EntityType="EFreshStore.Models.Context.EntityModels.Brand" />
+          <EntitySet Name="Categories" EntityType="EFreshStore.Models.Context.EntityModels.Category" />
+          <EntitySet Name="CorporateContracts" EntityType="EFreshStore.Models.Context.EntityModels.CorporateContract" />
+          <EntitySet Name="CorporateUsers" EntityType="EFreshStore.Models.Context.EntityModels.CorporateUser" />
+          <EntitySet Name="Customers" EntityType="EFreshStore.Models.Context.EntityModels.Customer" />
+          <EntitySet Name="Distributors" EntityType="EFreshStore.Models.Context.EntityModels.Distributor" />
+          <EntitySet Name="DistributorProductLines" EntityType="EFreshStore.Models.Context.EntityModels.DistributorProductLine" />
+          <EntitySet Name="Districts" EntityType="EFreshStore.Models.Context.EntityModels.District" />
+          <EntitySet Name="MasterDepots" EntityType="EFreshStore.Models.Context.EntityModels.MasterDepot" />
+          <EntitySet Name="MasterDepotProductLines" EntityType="EFreshStore.Models.Context.EntityModels.MasterDepotProductLine" />
+          <EntitySet Name="MeghnaUsers" EntityType="EFreshStore.Models.Context.EntityModels.MeghnaUser" />
+          <EntitySet Name="Orders" EntityType="EFreshStore.Models.Context.EntityModels.Order" />
+          <EntitySet Name="OrderDetails" EntityType="EFreshStore.Models.Context.EntityModels.OrderDetail" />
+          <EntitySet Name="Products" EntityType="EFreshStore.Models.Context.EntityModels.Product" />
+          <EntitySet Name="ProductImages" EntityType="EFreshStore.Models.Context.EntityModels.ProductImage" />
+          <EntitySet Name="ProductLines" EntityType="EFreshStore.Models.Context.EntityModels.ProductLine" />
+          <EntitySet Name="ProductLineDetails" EntityType="EFreshStore.Models.Context.EntityModels.ProductLineDetail" />
+          <EntitySet Name="ProductUnits" EntityType="EFreshStore.Models.Context.EntityModels.ProductUnit" />
+          <EntitySet Name="ProductUnitPrices" EntityType="EFreshStore.Models.Context.EntityModels.ProductUnitPrice" />
+          <EntitySet Name="Thanas" EntityType="EFreshStore.Models.Context.EntityModels.Thana" />
+          <EntitySet Name="ThanaWiseMasterDepots" EntityType="EFreshStore.Models.Context.EntityModels.ThanaWiseMasterDepot" />
+          <EntitySet Name="Users" EntityType="EFreshStore.Models.Context.EntityModels.User" />
+          <EntitySet Name="UserTypes" EntityType="EFreshStore.Models.Context.EntityModels.UserType" />
+          <AssociationSet Name="FK_Product_Brand" Association="EFreshStore.Models.Context.EntityModels.FK_Product_Brand">
+            <End Role="Brand" EntitySet="Brands" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="EFreshStore.Models.Context.EntityModels.FK_Product_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CorporateUser_CorporateContract" Association="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_CorporateContract">
+            <End Role="CorporateContract" EntitySet="CorporateContracts" />
+            <End Role="CorporateUser" EntitySet="CorporateUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CorporateUser_User" Association="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="CorporateUser" EntitySet="CorporateUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="EFreshStore.Models.Context.EntityModels.FK_Customer_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Distributor_MasterDepot" Association="EFreshStore.Models.Context.EntityModels.FK_Distributor_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepots" />
+            <End Role="Distributor" EntitySet="Distributors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Distributor_Thana" Association="EFreshStore.Models.Context.EntityModels.FK_Distributor_Thana">
+            <End Role="Thana" EntitySet="Thanas" />
+            <End Role="Distributor" EntitySet="Distributors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributorProductLine_Distributor" Association="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_Distributor">
+            <End Role="Distributor" EntitySet="Distributors" />
+            <End Role="DistributorProductLine" EntitySet="DistributorProductLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributorProductLine_ProductLine" Association="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLines" />
+            <End Role="DistributorProductLine" EntitySet="DistributorProductLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Thana_District" Association="EFreshStore.Models.Context.EntityModels.FK_Thana_District">
+            <End Role="District" EntitySet="Districts" />
+            <End Role="Thana" EntitySet="Thanas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterDepotProductLine_MasterDepot" Association="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepots" />
+            <End Role="MasterDepotProductLine" EntitySet="MasterDepotProductLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_MasterDepot" Association="EFreshStore.Models.Context.EntityModels.FK_Order_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepots" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanaWiseMasterDepot_MasterDepot" Association="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_MasterDepot">
+            <End Role="MasterDepot" EntitySet="MasterDepots" />
+            <End Role="ThanaWiseMasterDepot" EntitySet="ThanaWiseMasterDepots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterDepotProductLine_ProductLine" Association="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLines" />
+            <End Role="MasterDepotProductLine" EntitySet="MasterDepotProductLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeghnaUser_User" Association="EFreshStore.Models.Context.EntityModels.FK_MeghnaUser_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="MeghnaUser" EntitySet="MeghnaUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Thana" Association="EFreshStore.Models.Context.EntityModels.FK_Order_Thana">
+            <End Role="Thana" EntitySet="Thanas" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="EFreshStore.Models.Context.EntityModels.FK_Order_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Order" Association="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_ProductUnit" Association="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnits" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductLineDetails_Product" Association="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductLineDetail" EntitySet="ProductLineDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductUnit_Product" Association="EFreshStore.Models.Context.EntityModels.FK_ProductUnit_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductUnit" EntitySet="ProductUnits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImage_ProductUnit" Association="EFreshStore.Models.Context.EntityModels.FK_ProductImage_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnits" />
+            <End Role="ProductImage" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductLineDetails_ProductLine" Association="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_ProductLine">
+            <End Role="ProductLine" EntitySet="ProductLines" />
+            <End Role="ProductLineDetail" EntitySet="ProductLineDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductUnitPrice_ProductUnit" Association="EFreshStore.Models.Context.EntityModels.FK_ProductUnitPrice_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnits" />
+            <End Role="ProductUnitPrice" EntitySet="ProductUnitPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanaWiseMasterDepot_Thana" Association="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_Thana">
+            <End Role="Thana" EntitySet="Thanas" />
+            <End Role="ThanaWiseMasterDepot" EntitySet="ThanaWiseMasterDepots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserType" Association="EFreshStore.Models.Context.EntityModels.FK_User_UserType">
+            <End Role="UserType" EntitySet="UserTypes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="WishLists" EntityType="EFreshStore.Models.Context.EntityModels.WishList" />
+          <AssociationSet Name="FK_MasterDepot_User" Association="EFreshStore.Models.Context.EntityModels.FK_MasterDepot_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="MasterDepot" EntitySet="MasterDepots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishList_ProductUnit" Association="EFreshStore.Models.Context.EntityModels.FK_WishList_ProductUnit">
+            <End Role="ProductUnit" EntitySet="ProductUnits" />
+            <End Role="WishList" EntitySet="WishLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishList_User" Association="EFreshStore.Models.Context.EntityModels.FK_WishList_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="WishList" EntitySet="WishLists" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="EFreshStore.Models.Context.EntityModels.FK_Product_Brand" FromRole="Brand" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="EFreshStore.Models.Context.EntityModels.FK_Product_Category" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="CorporateContract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountPercentage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Validity" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CorporateUsers" Relationship="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_CorporateContract" FromRole="CorporateContract" ToRole="CorporateUser" />
+        </EntityType>
+        <EntityType Name="CorporateUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CorporateContractId" Type="Int64" />
+          <Property Name="DeliveryAddress1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CorporateContract" Relationship="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_CorporateContract" FromRole="CorporateUser" ToRole="CorporateContract" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_User" FromRole="CorporateUser" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_Customer_User" FromRole="Customer" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Distributor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MasterDepotId" Type="Int64" />
+          <Property Name="ThanaId" Type="Int64" />
+          <NavigationProperty Name="MasterDepot" Relationship="EFreshStore.Models.Context.EntityModels.FK_Distributor_MasterDepot" FromRole="Distributor" ToRole="MasterDepot" />
+          <NavigationProperty Name="Thana" Relationship="EFreshStore.Models.Context.EntityModels.FK_Distributor_Thana" FromRole="Distributor" ToRole="Thana" />
+          <NavigationProperty Name="DistributorProductLines" Relationship="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_Distributor" FromRole="Distributor" ToRole="DistributorProductLine" />
+        </EntityType>
+        <EntityType Name="DistributorProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DistributorId" Type="Int64" />
+          <Property Name="ProductLineId" Type="Int64" />
+          <NavigationProperty Name="Distributor" Relationship="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_Distributor" FromRole="DistributorProductLine" ToRole="Distributor" />
+          <NavigationProperty Name="ProductLine" Relationship="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_ProductLine" FromRole="DistributorProductLine" ToRole="ProductLine" />
+        </EntityType>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Thanas" Relationship="EFreshStore.Models.Context.EntityModels.FK_Thana_District" FromRole="District" ToRole="Thana" />
+        </EntityType>
+        <EntityType Name="MasterDepot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Distributors" Relationship="EFreshStore.Models.Context.EntityModels.FK_Distributor_MasterDepot" FromRole="MasterDepot" ToRole="Distributor" />
+          <NavigationProperty Name="MasterDepotProductLines" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_MasterDepot" FromRole="MasterDepot" ToRole="MasterDepotProductLine" />
+          <NavigationProperty Name="Orders" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_MasterDepot" FromRole="MasterDepot" ToRole="Order" />
+          <NavigationProperty Name="ThanaWiseMasterDepots" Relationship="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_MasterDepot" FromRole="MasterDepot" ToRole="ThanaWiseMasterDepot" />
+          <Property Name="UserId" Type="Int64" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepot_User" FromRole="MasterDepot" ToRole="User" />
+        </EntityType>
+        <EntityType Name="MasterDepotProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasterDepotId" Type="Int64" />
+          <Property Name="ProductLineId" Type="Int64" />
+          <NavigationProperty Name="MasterDepot" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_MasterDepot" FromRole="MasterDepotProductLine" ToRole="MasterDepot" />
+          <NavigationProperty Name="ProductLine" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_ProductLine" FromRole="MasterDepotProductLine" ToRole="ProductLine" />
+        </EntityType>
+        <EntityType Name="MeghnaUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_MeghnaUser_User" FromRole="MeghnaUser" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ThanaId" Type="Int64" />
+          <Property Name="MasterDepotId" Type="Int64" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MasterDepot" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_MasterDepot" FromRole="Order" ToRole="MasterDepot" />
+          <NavigationProperty Name="Thana" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_Thana" FromRole="Order" ToRole="Thana" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_User" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="OrderDetails" Relationship="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_Order" FromRole="Order" ToRole="OrderDetail" />
+          <Property Name="OrderStateId" Type="Int64" />
+          <Property Name="OrderRejectId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" />
+          <Property Name="ProductUnitId" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Order" Relationship="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_Order" FromRole="OrderDetail" ToRole="Order" />
+          <NavigationProperty Name="ProductUnit" Relationship="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_ProductUnit" FromRole="OrderDetail" ToRole="ProductUnit" />
+          <Property Name="PacketQuantity" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int64" />
+          <Property Name="BrandId" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Brand" Relationship="EFreshStore.Models.Context.EntityModels.FK_Product_Brand" FromRole="Product" ToRole="Brand" />
+          <NavigationProperty Name="Category" Relationship="EFreshStore.Models.Context.EntityModels.FK_Product_Category" FromRole="Product" ToRole="Category" />
+          <NavigationProperty Name="ProductLineDetails" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_Product" FromRole="Product" ToRole="ProductLineDetail" />
+          <NavigationProperty Name="ProductUnits" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductUnit_Product" FromRole="Product" ToRole="ProductUnit" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImageLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductUnitId" Type="Int64" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ProductUnit" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductImage_ProductUnit" FromRole="ProductImage" ToRole="ProductUnit" />
+        </EntityType>
+        <EntityType Name="ProductLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DistributorProductLines" Relationship="EFreshStore.Models.Context.EntityModels.FK_DistributorProductLine_ProductLine" FromRole="ProductLine" ToRole="DistributorProductLine" />
+          <NavigationProperty Name="MasterDepotProductLines" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepotProductLine_ProductLine" FromRole="ProductLine" ToRole="MasterDepotProductLine" />
+          <NavigationProperty Name="ProductLineDetails" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_ProductLine" FromRole="ProductLine" ToRole="ProductLineDetail" />
+        </EntityType>
+        <EntityType Name="ProductLineDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductLineId" Type="Int64" />
+          <Property Name="ProductId" Type="Int64" />
+          <NavigationProperty Name="Product" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_Product" FromRole="ProductLineDetail" ToRole="Product" />
+          <NavigationProperty Name="ProductLine" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductLineDetails_ProductLine" FromRole="ProductLineDetail" ToRole="ProductLine" />
+        </EntityType>
+        <EntityType Name="ProductUnit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int64" />
+          <Property Name="StockKeepingUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CartonSize" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DistributorPricePerCarton" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TradePricePerCarton" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MaximumRetailPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrderDetails" Relationship="EFreshStore.Models.Context.EntityModels.FK_OrderDetails_ProductUnit" FromRole="ProductUnit" ToRole="OrderDetail" />
+          <NavigationProperty Name="Product" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductUnit_Product" FromRole="ProductUnit" ToRole="Product" />
+          <NavigationProperty Name="ProductImages" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductImage_ProductUnit" FromRole="ProductUnit" ToRole="ProductImage" />
+          <NavigationProperty Name="ProductUnitPrices" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductUnitPrice_ProductUnit" FromRole="ProductUnit" ToRole="ProductUnitPrice" />
+          <NavigationProperty Name="WishLists" Relationship="EFreshStore.Models.Context.EntityModels.FK_WishList_ProductUnit" FromRole="ProductUnit" ToRole="WishList" />
+        </EntityType>
+        <EntityType Name="ProductUnitPrice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductUnitId" Type="Int64" />
+          <Property Name="DistributorPricePerCarton" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TradePricePerCarton" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MaximumRetailPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ProductUnit" Relationship="EFreshStore.Models.Context.EntityModels.FK_ProductUnitPrice_ProductUnit" FromRole="ProductUnitPrice" ToRole="ProductUnit" />
+        </EntityType>
+        <EntityType Name="Thana">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DistrictId" Type="Int64" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Distributors" Relationship="EFreshStore.Models.Context.EntityModels.FK_Distributor_Thana" FromRole="Thana" ToRole="Distributor" />
+          <NavigationProperty Name="District" Relationship="EFreshStore.Models.Context.EntityModels.FK_Thana_District" FromRole="Thana" ToRole="District" />
+          <NavigationProperty Name="Orders" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_Thana" FromRole="Thana" ToRole="Order" />
+          <NavigationProperty Name="ThanaWiseMasterDepots" Relationship="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_Thana" FromRole="Thana" ToRole="ThanaWiseMasterDepot" />
+        </EntityType>
+        <EntityType Name="ThanaWiseMasterDepot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasterDepotId" Type="Int64" />
+          <Property Name="ThanaId" Type="Int64" />
+          <NavigationProperty Name="MasterDepot" Relationship="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_MasterDepot" FromRole="ThanaWiseMasterDepot" ToRole="MasterDepot" />
+          <NavigationProperty Name="Thana" Relationship="EFreshStore.Models.Context.EntityModels.FK_ThanaWiseMasterDepot_Thana" FromRole="ThanaWiseMasterDepot" ToRole="Thana" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserTypeId" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CorporateUsers" Relationship="EFreshStore.Models.Context.EntityModels.FK_CorporateUser_User" FromRole="User" ToRole="CorporateUser" />
+          <NavigationProperty Name="Customers" Relationship="EFreshStore.Models.Context.EntityModels.FK_Customer_User" FromRole="User" ToRole="Customer" />
+          <NavigationProperty Name="MeghnaUsers" Relationship="EFreshStore.Models.Context.EntityModels.FK_MeghnaUser_User" FromRole="User" ToRole="MeghnaUser" />
+          <NavigationProperty Name="Orders" Relationship="EFreshStore.Models.Context.EntityModels.FK_Order_User" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="UserType" Relationship="EFreshStore.Models.Context.EntityModels.FK_User_UserType" FromRole="User" ToRole="UserType" />
+          <NavigationProperty Name="MasterDepots" Relationship="EFreshStore.Models.Context.EntityModels.FK_MasterDepot_User" FromRole="User" ToRole="MasterDepot" />
+          <NavigationProperty Name="WishLists" Relationship="EFreshStore.Models.Context.EntityModels.FK_WishList_User" FromRole="User" ToRole="WishList" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="Users" Relationship="EFreshStore.Models.Context.EntityModels.FK_User_UserType" FromRole="UserType" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Product_Brand">
+          <End Type="EFreshStore.Models.Context.EntityModels.Brand" Role="Brand" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BrandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Type="EFreshStore.Models.Context.EntityModels.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CorporateUser_CorporateContract">
+          <End Type="EFreshStore.Models.Context.EntityModels.CorporateContract" Role="CorporateContract" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.CorporateUser" Role="CorporateUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CorporateContract">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CorporateUser">
+              <PropertyRef Name="CorporateContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CorporateUser_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.CorporateUser" Role="CorporateUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CorporateUser">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Distributor_MasterDepot">
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepot" Role="MasterDepot" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Distributor" Role="Distributor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Distributor">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Distributor_Thana">
+          <End Type="EFreshStore.Models.Context.EntityModels.Thana" Role="Thana" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Distributor" Role="Distributor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Distributor">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributorProductLine_Distributor">
+          <End Type="EFreshStore.Models.Context.EntityModels.Distributor" Role="Distributor" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.DistributorProductLine" Role="DistributorProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Distributor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DistributorProductLine">
+              <PropertyRef Name="DistributorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributorProductLine_ProductLine">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductLine" Role="ProductLine" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.DistributorProductLine" Role="DistributorProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DistributorProductLine">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Thana_District">
+          <End Type="EFreshStore.Models.Context.EntityModels.District" Role="District" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Thana" Role="Thana" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="District">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Thana">
+              <PropertyRef Name="DistrictId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterDepotProductLine_MasterDepot">
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepot" Role="MasterDepot" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepotProductLine" Role="MasterDepotProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepotProductLine">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_MasterDepot">
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepot" Role="MasterDepot" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanaWiseMasterDepot_MasterDepot">
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepot" Role="MasterDepot" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ThanaWiseMasterDepot" Role="ThanaWiseMasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterDepot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ThanaWiseMasterDepot">
+              <PropertyRef Name="MasterDepotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterDepotProductLine_ProductLine">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductLine" Role="ProductLine" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepotProductLine" Role="MasterDepotProductLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepotProductLine">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeghnaUser_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.MeghnaUser" Role="MeghnaUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeghnaUser">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Thana">
+          <End Type="EFreshStore.Models.Context.EntityModels.Thana" Role="Thana" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Order">
+          <End Type="EFreshStore.Models.Context.EntityModels.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_ProductUnit">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnit" Role="ProductUnit" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductLineDetails_Product">
+          <End Type="EFreshStore.Models.Context.EntityModels.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductLineDetail" Role="ProductLineDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductLineDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductUnit_Product">
+          <End Type="EFreshStore.Models.Context.EntityModels.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnit" Role="ProductUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductUnit">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImage_ProductUnit">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnit" Role="ProductUnit" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductLineDetails_ProductLine">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductLine" Role="ProductLine" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductLineDetail" Role="ProductLineDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductLine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductLineDetail">
+              <PropertyRef Name="ProductLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductUnitPrice_ProductUnit">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnit" Role="ProductUnit" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnitPrice" Role="ProductUnitPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductUnitPrice">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanaWiseMasterDepot_Thana">
+          <End Type="EFreshStore.Models.Context.EntityModels.Thana" Role="Thana" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.ThanaWiseMasterDepot" Role="ThanaWiseMasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Thana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ThanaWiseMasterDepot">
+              <PropertyRef Name="ThanaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserType">
+          <End Type="EFreshStore.Models.Context.EntityModels.UserType" Role="UserType" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WishList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="ProductUnitId" Type="Int64" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="AddedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ProductUnit" Relationship="EFreshStore.Models.Context.EntityModels.FK_WishList_ProductUnit" FromRole="WishList" ToRole="ProductUnit" />
+          <NavigationProperty Name="User" Relationship="EFreshStore.Models.Context.EntityModels.FK_WishList_User" FromRole="WishList" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_MasterDepot_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="0..1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.MasterDepot" Role="MasterDepot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterDepot">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishList_ProductUnit">
+          <End Type="EFreshStore.Models.Context.EntityModels.ProductUnit" Role="ProductUnit" Multiplicity="1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.WishList" Role="WishList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishList">
+              <PropertyRef Name="ProductUnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishList_User">
+          <End Type="EFreshStore.Models.Context.EntityModels.User" Role="User" Multiplicity="1" />
+          <End Type="EFreshStore.Models.Context.EntityModels.WishList" Role="WishList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishList">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EFreshStoreModelsContextEntityModelsStoreContainer" CdmEntityContainer="FreshContext">
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Brand">
+              <MappingFragment StoreEntitySet="Brand">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CorporateContracts">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.CorporateContract">
+              <MappingFragment StoreEntitySet="CorporateContract">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Validity" ColumnName="Validity" />
+                <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CorporateUsers">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.CorporateUser">
+              <MappingFragment StoreEntitySet="CorporateUser">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeliveryAddress2" ColumnName="DeliveryAddress2" />
+                <ScalarProperty Name="DeliveryAddress1" ColumnName="DeliveryAddress1" />
+                <ScalarProperty Name="CorporateContractId" ColumnName="CorporateContractId" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeliveryAddress2" ColumnName="DeliveryAddress2" />
+                <ScalarProperty Name="DeliveryAddress1" ColumnName="DeliveryAddress1" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Distributors">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Distributor">
+              <MappingFragment StoreEntitySet="Distributor">
+                <ScalarProperty Name="ThanaId" ColumnName="ThanaId" />
+                <ScalarProperty Name="MasterDepotId" ColumnName="MasterDepotId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DistributorProductLines">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.DistributorProductLine">
+              <MappingFragment StoreEntitySet="DistributorProductLine">
+                <ScalarProperty Name="ProductLineId" ColumnName="ProductLineId" />
+                <ScalarProperty Name="DistributorId" ColumnName="DistributorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Districts">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.District">
+              <MappingFragment StoreEntitySet="District">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MasterDepots">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.MasterDepot">
+              <MappingFragment StoreEntitySet="MasterDepot">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MasterDepotProductLines">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.MasterDepotProductLine">
+              <MappingFragment StoreEntitySet="MasterDepotProductLine">
+                <ScalarProperty Name="ProductLineId" ColumnName="ProductLineId" />
+                <ScalarProperty Name="MasterDepotId" ColumnName="MasterDepotId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeghnaUsers">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.MeghnaUser">
+              <MappingFragment StoreEntitySet="MeghnaUser">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeliveryAddress2" ColumnName="DeliveryAddress2" />
+                <ScalarProperty Name="DeliveryAddress1" ColumnName="DeliveryAddress1" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderRejectId" ColumnName="OrderRejectId" />
+                <ScalarProperty Name="OrderStateId" ColumnName="OrderStateId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="MasterDepotId" ColumnName="MasterDepotId" />
+                <ScalarProperty Name="ThanaId" ColumnName="ThanaId" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="PacketQuantity" ColumnName="PacketQuantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductUnitId" ColumnName="ProductUnitId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ProductImage">
+              <MappingFragment StoreEntitySet="ProductImage">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="ProductUnitId" ColumnName="ProductUnitId" />
+                <ScalarProperty Name="ImageLocation" ColumnName="ImageLocation" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductLines">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ProductLine">
+              <MappingFragment StoreEntitySet="ProductLine">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductLineDetails">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ProductLineDetail">
+              <MappingFragment StoreEntitySet="ProductLineDetails">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductLineId" ColumnName="ProductLineId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductUnits">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ProductUnit">
+              <MappingFragment StoreEntitySet="ProductUnit">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="MaximumRetailPrice" ColumnName="MaximumRetailPrice" />
+                <ScalarProperty Name="TradePricePerCarton" ColumnName="TradePricePerCarton" />
+                <ScalarProperty Name="DistributorPricePerCarton" ColumnName="DistributorPricePerCarton" />
+                <ScalarProperty Name="CartonSize" ColumnName="CartonSize" />
+                <ScalarProperty Name="StockKeepingUnit" ColumnName="StockKeepingUnit" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductUnitPrices">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ProductUnitPrice">
+              <MappingFragment StoreEntitySet="ProductUnitPrice">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="MaximumRetailPrice" ColumnName="MaximumRetailPrice" />
+                <ScalarProperty Name="TradePricePerCarton" ColumnName="TradePricePerCarton" />
+                <ScalarProperty Name="DistributorPricePerCarton" ColumnName="DistributorPricePerCarton" />
+                <ScalarProperty Name="ProductUnitId" ColumnName="ProductUnitId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Thanas">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.Thana">
+              <MappingFragment StoreEntitySet="Thana">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DistrictId" ColumnName="DistrictId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanaWiseMasterDepots">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.ThanaWiseMasterDepot">
+              <MappingFragment StoreEntitySet="ThanaWiseMasterDepot">
+                <ScalarProperty Name="ThanaId" ColumnName="ThanaId" />
+                <ScalarProperty Name="MasterDepotId" ColumnName="MasterDepotId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypes">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WishLists">
+            <EntityTypeMapping TypeName="EFreshStore.Models.Context.EntityModels.WishList">
+              <MappingFragment StoreEntitySet="WishList">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="AddedOn" ColumnName="AddedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="ProductUnitId" ColumnName="ProductUnitId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

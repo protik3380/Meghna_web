@@ -1,0 +1,316 @@
+﻿@using System.Globalization
+@using System.Web.UI.WebControls
+@using EFreshStore.Models.Context;
+@using EFreshStore.Models;
+@using EFreshStore.Models.Context.EntityModels
+@using EFreshStore.Models.Enum
+@using EFreshStore.Utility
+@using Microsoft.Ajax.Utilities
+@using Vereyon.Web
+@model List<ProductUnit>
+@{
+    double realPrice = 0.0;
+    long userTypeId = 0;
+    Layout = "~/Views/Shared/_Master.cshtml";
+    //List<CartView> cartData = ViewBag.cart;
+    decimal discount = 0m;
+    var isLogin = false;
+    var userName = "";
+    if (Session["email"] != null)
+    {
+        isLogin = true;
+        userName = Session["email"].ToString();
+        var userId = Convert.ToInt64(Session["UserId"]);
+        userTypeId = Convert.ToInt64(Session["userTypeId"]);
+        isLogin = true;
+        if (userTypeId == (long)UserTypeEnum.Corporate)
+        {
+            CorporateUser corporateUsers = (CorporateUser)Session["corporateUser"];
+            HttpCookie myCookie = new HttpCookie("user");
+            myCookie = Request.Cookies["user"];
+            if (myCookie == null)
+            {
+                discount = 0;
+            }
+            //discount = Convert.ToDecimal(Session["discount"]);
+
+        }
+    }
+    //decimal discountPrice = discount / 100;
+    //Session["discount"] = discount;
+    List<Brand> brands = Dropdown.Brands();
+    List<Category> categories = Dropdown.Categories();
+}
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                    <li class=""> <a title="Go to Home Page" href="">Search </a></li>
+                    @*<li><strong>Lenovo </strong></li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<div class="main-container col2-left-layout">
+<div class="container">
+
+<div class="row">
+<div class="col-main col-sm-9 col-xs-12 col-sm-push-3">
+
+<div class="shop-inner">
+<div class="toolbar">
+    <div class="view-mode">
+        <ul>
+            <li class="active"> <a href="#"> <i class="fa fa-th-large"></i> </a> </li>
+            <li> <a href="#"> <i class="fa fa-th-list"></i> </a> </li>
+        </ul>
+    </div>
+    <div class="sorter">
+        <div class="short-by">
+            <label>Sort By:</label>
+            <select>
+                <option selected="selected">Position</option>
+                <option>Name</option>
+                <option>Price</option>
+                <option>Size</option>
+            </select>
+        </div>
+        <div class="short-by page">
+            <label>Show:</label>
+            <select>
+                <option selected="selected">18</option>
+                <option>20</option>
+                <option>25</option>
+                <option>30</option>
+            </select>
+        </div>
+    </div>
+</div>
+    <div class="product-grid-area">
+        <ul class="products-grid" id="allProduct">
+            <div id="loadingGif1">
+                <img src="~/Content/images/products/loading.gif" style="display: none"/>
+            </div>
+            @if (Model.Count == 0)
+            {
+                <div align="center">
+                    <img src="~/Content/images/products/noitemfound.png" style="height: 30%; width: 30%;"/>
+                    <p style="font-size: 24px; color: #919090; font-weight: bold; padding: 10px">Sorry, no product found!</p>
+                    @*<p style="font-size: 20px; color: grey; padding: 5px">Please try searching for something else</p>*@
+                </div>
+            }
+            else
+            {
+               foreach (var product in Model)
+                {
+                    var wishListActive = product.ExistsInWishList ? "in-wishlist" : "";
+                    var productImage = product.ProductImages.FirstOrDefault();
+                    var imageLocation = productImage == null ?"Content/img/product/NoProductImage.png" : productImage.ImageLocation;
+                    <input type="hidden" id="pUnitId_@product.Id" value="@product.Id" />
+                    <input type="hidden" id="pTypeId_@product.Id" value="@product.Product.Category.ProductTypeId" />
+                    <input type="hidden" id="pName_@product.Id" value="@product.Product.Name" />
+                    <input type="hidden" id="pImage_@product.Id" value="@imageLocation" />
+                    <input type="hidden" id="pUnit_@product.Id" value="@product.StockKeepingUnit" />
+                    <input type="hidden" id="brandName_@product.Id" value="@product.Product.Brand.Name" />
+                    <input type="hidden" id="categoryName_@product.Id" value="@product.Product.Category.Name" />
+                    <input type="hidden" id="unitPriceWithoutDiscount_@product.Id" value="@product.MaximumRetailPrice" />
+                    <input type="hidden" id="distributorPrice_@product.Id" value="@product.DistributorPricePerCarton" />
+                    <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="product-item">
+                            <div class="item-inner">
+                                <div class="product-thumbnail">
+                                    <div class="box-hover">
+                                        <div class="add-to-links" data-role="add-to-links">
+                                            <div class="btn-quickview"> <a href="#" data-toggle="modal" data-target="#modal-quickview" onclick="QuickView(@product.Id)"><i class="fa fa-search-plus" aria-hidden="true"></i> Quick View</a> </div>
+                                            @* <a onclick="addOrRemoveFromWishList(@product.Id)" role="button" class="action add-to-wishlist" title="Add to Wishlist"></a>*@
+                                            <div class="wishlist-wrapper">
+                                                <a onclick="addOrRemoveFromWishList(@product.Id)" role="button" class="" title="Add to Wish List">
+                                                    <div id="icon-wishlist_@product.Id" class="icon-wishlist @wishListActive"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (productImage != null)
+                                    {
+                                        <a href="@Url.Action("Details", "Product", new {ProductId = @product.Id})" class="product-item-photo"><img src="@BaseUrl.baseUrl\@productImage.ImageLocation" alt="product"></a>
+
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Details", "Product", new {ProductId = @product.Id})" class="product-item-photo"><img src="~/Content/images/products/NoProductImage.png" alt="picture" /></a>
+                                    }
+                                </div>
+                                <div class="pro-box-info">
+                                    <div class="item-info">
+                                        <div class="info-inner">
+                                            <div class="item-title">
+                                                <h4><a title="@product.Product.Name" href="@Url.Action("Details", "Product", new {ProductId = @product.Id})">@product.Product.Name</a></h4>
+                                            </div>
+                                            <div class="item-content">
+                                                <div class="rating">
+
+                                                    @*<span class="stars">@(product.Ratings.Count > 0 ? product.Ratings.Average(p => p.Rating1) : 0)</span>*@
+                                                    <span class="stars">@product.AverageRating</span>
+                                                    <a style="font-size: 14px">@product.StockKeepingUnit</a>
+                                                </div>
+                                                <div class="item-price">
+                                                    @if (product.PorductDiscountPrice != null)
+                                                    {
+                                                        decimal oldPrice = (decimal)product.MaximumRetailPrice;
+                                                        decimal newPrice = (decimal)product.PorductDiscountPrice;
+                                                        <input type="hidden" id="unitPrice_@product.Id" value="@product.PorductDiscountPrice" />
+                                                        <div class="price-box">
+                                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price"> &#2547; @Convert.ToDecimal(@newPrice.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD"))) </span> </p>
+                                                            <p class="old-price"> <span class="price-label">Regular Price:</span> <span class="price"> &#2547; @Convert.ToDecimal(@oldPrice.ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")))</span> </p>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="price-box">
+                                                            <p class="special-price"> <span class="price-label">Special Price</span> <span class="price"> &#2547; @Convert.ToDecimal(Convert.ToDecimal(product.MaximumRetailPrice).ToString("N", CultureInfo.CreateSpecificCulture("bn-BD")))</span> </p>
+                                                        </div>
+                                                        <input type="hidden" id="unitPrice_@product.Id" value="@product.MaximumRetailPrice" />
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-hover">
+                                        <div class="product-item-actions">
+                                            <div class="pro-actions">
+                                                <button onclick="addtoCart(@product.Id)" class="action add-to-cart" type="button" title="Add to Cart"> <span>Add to Cart</span> </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+          
+        </ul>
+
+    </div>
+@*<div class="pagination-area ">
+    <ul>
+        <li><a class="active" href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+    </ul>
+</div>*@
+</div>
+</div>
+<aside class="sidebar col-sm-3 col-xs-12 col-sm-pull-9">
+    <div class="block shop-by-side">
+        <div class="sidebar-bar-title">
+            <h3>Shop By</h3>
+        </div>
+        <div class="block-content">
+            <p class="block-subtitle">Shopping Options</p>
+            <div class="layered-Category">
+                <h2 class="saider-bar-title">Categories</h2>
+                <div class="layered-content">
+                    <ul class="check-box-list">
+                        @if (categories != null)
+                        {
+                            foreach (var category in categories)
+                            {
+                                @*<li><a href="@Url.Action("Search", "Home", new {categoryId = category.Id})">
+                                        <input type="checkbox" id="jtv1" name="jtvc">
+                                        <label> <span class="button"></span> @category.Name</label></a>
+                                </li>*@
+
+                        string brandId = null;
+                        string searchString = null;
+                        var categoryIds = new List<long>();
+                        if (ViewBag.CategoryIds != null)
+                        {
+                            categoryIds = (List<long>)ViewBag.CategoryIds;
+                        }
+                                 <li>
+                                        <input @(categoryIds.Contains(category.Id) ? "checked" : "") type="checkbox" id="category_@category.Id" class="categoryId" value="@category.Id" name="categoryId">
+                                         <label for="category_@category.Id"> <span class="button"></span> @category.Name</label>
+                                     
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="block-content">
+            <div class="layered-Category">
+                <h2 class="saider-bar-title">Brands</h2>
+                <div class="layered-content">
+                    <ul class="check-box-list">
+                        @if (brands != null)
+                        {
+                            foreach (var brand in brands)
+                            {
+                                @*<li>
+                                    <a href="@Url.Action("Search", "Home", new {brandId = brand.Id})">
+                                        <input type="checkbox" id="jtv2" name="jtvc">
+                                        <label> <span class="button"></span> @brand.Name</label>
+                                    </a>
+                                </li>*@
+
+
+                        string categoryId = null;
+                        string searchString = null;
+                        var brandIds = new List<long>();
+                        if (ViewBag.BrandIds != null)
+                        {
+                            brandIds = (List<long>)ViewBag.BrandIds;
+                        }
+                                <li>
+                                    <input @(brandIds.Contains(brand.Id) ? "checked" : "") type="checkbox" id="brand_@brand.Id" class="brandId" value="@brand.Id" name="brandId">
+                                    <label for="brand_@brand.Id"> <span class="button"></span> @brand.Name</label>
+                                     
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+</div>
+</div>
+</div>
+    @section scripts{
+        <script>
+         $(document).ready(function () {
+                var name = @Session["MegaMenuActive"].ToString();
+                $(".nav li").removeClass("active");
+                $('#home').removeClass('active');
+                $(@Session["MegaMenuActive"].ToString()).addClass('active');
+                //if (name.toString() === "category") {
+                //    $(".nav li").removeClass("active");
+                //    $('#category').addClass('active');
+                //} 
+                //else if (name === "brand") {
+                //    $(".nav li").removeClass("active");
+                //    $('#brand').addClass('active');
+                //} else if (name === "search") {
+                //    $(".nav li").removeClass("active");
+                //} else {
+                //    $(".nav li").removeClass("active");
+                //}
+                //Search without loading in Search Page
+
+         });
+
+
+        </script>
+    }

@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewBag.Title = "Contact Us";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Go to Home Page" href="@Url.Action("Index","Home")">Home</a><span>&raquo;</span></li>
+                    <li><strong>Contact Us</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="row">
+            <section class="col-main col-sm-12">
+                <div id="contact" class="page-content page-contact">
+                    <div class="page-title">
+                        <h2>Contact Us</h2>
+                    </div>
+                    <div id="message-box-conact">We're available for 24/7</div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6" id="contact_form_map">
+                            @*<h3 class="page-subheading">Let's get in touch</h3>
+                            <p>Lorem ipsum dolor sit amet onsectetuer adipiscing elit. Mauris ferMentum dictum magna. Sed laoreet aliquam leo. Ut tellus dolor dapibus eget. Mauris tincidunt aliquam lectus sed vestibulum. Vestibulum bibendum suscipit mattis.</p>
+                            <br/>
+                            <ul>
+                                <li>Praesent nec tincidunt turpis.</li>
+                                <li>Aliquam et nisi risus.&nbsp;Cras ut varius ante.</li>
+                                <li>Ut congue gravida dolor, vitae viverra dolor.</li>
+                            </ul>*@
+                            <br/>
+                            <ul class="store_info">
+                                <li><i class="fa fa-home"></i>Fresh Cottage, H#48, S#13, Dhaka-1230, Bangladesh</li>
+                                <li><i class="fa fa-phone"></i><span>+88 017 13191921</span></li>
+                                <li><i class="fa fa-fax"></i><span>+88 017 14166870</span></li>
+                                <li><i class="fa fa-envelope"></i>Email: <span><a href="#">info@meghnagroup.biz</a></span></li>
+                            </ul>
+                            <div class="store_info" style="margin-top: 4%; margin-bottom: 4%; height: 400px;">
+
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.4683983680416!2d90.38873151498366!3d23.873003784529065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c416fdb1ac8b%3A0xda03280fd375d8bc!2sFresh+Cottage+(Meghna+Group+Of+Industries)!5e0!3m2!1sbn!2sbd!4v1564032798731!5m2!1sbn!2sbd" width="100%" height="100%" frameborder="0" style="border: 0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+                            <div class="col-sm-6">
+                                <div id="mgs">
+                                    @if (@ViewBag.Message != null)
+                                    {<div class="alert alert-success">
+                                        <strong>@ViewBag.Message!</strong> .
+                                    </div>
+                                    }
+                                </div>
+                                <h3 class="page-subheading">Make an enquiry</h3>
+                                <div class="contact-form-box">
+                                    <div class="form-selector">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control input-sm" name="Name" id="Name"/>
+                                        </div>
+                                    <div class="form-selector">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control input-sm" name="Email" id="Email" required=""/>
+                                    </div>
+                                    <div class="form-selector">
+                                        <label>Phone</label>
+                                        <input type="text" class="form-control input-sm" name="MobileNo" id="MobileNo" maxlength="11"/>
+                                    </div>
+                                     <div class="form-selector">
+                                        <label>Subject</label>
+                                        <input type="text" class="form-control input-sm" name="Subject" id="Subject" />
+                                    </div>
+                                    <div class="form-selector">
+                                        <label>Message</label>
+                                        <textarea class="form-control input-sm" rows="10" name="Message" id="Message"></textarea>
+                                    </div>
+                                    <div class="form-selector">
+                                        <button class="button" type="submit"><i class="fa fa-send"></i>&nbsp; <span>Send Message</span></button>
+                                        &nbsp; <a onclick="emptyForm()" class="button" style="cursor: pointer">Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                          
+</div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+@section scripts{
+    @*<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>*@
+    <script>
+
+        jQuery.validator.addMethod("phone", function(phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            return this.optional(element) || phone_number.length > 10 &&
+                phone_number.match(/\+?(88)?01[567893][0-9]{8}\b/);
+        }, "Invalid phone number");
+        $("#main-contact-form").validate({
+            rules: {
+                Name: "required",
+                Message: "required",
+                Subject: "required",
+                Email: {
+                    required: true,
+                    email: true
+                },
+                MobileNo: {
+                    required: true,
+                    phone: true,
+                    number:true
+                }
+            },
+            messages: {
+                Name: "Please enter your name",
+                Message: "Please enter your message ",
+                Subject: "Please enter subject",
+                Email: {
+                    required: "Please enter your email",
+                    email: "Please enter a valid email. Example - abc@gmail.com"
+                },
+                MobileNo: {
+                    required: "Please enter a mobile no",
+                    phone: "Please enter a valid mobile no. Example - 01xxxxxxxxx",
+                    number:"please enter digits"
+                }
+            }
+        });
+       
+        function emptyForm() {
+            $("#Name").val("");
+            $("#MobileNo").val("");
+            $("#Email").val("");
+            $("#Subject").val("");
+            $("#Message").val("");
+        }
+
+        $(document).ready(function () {
+            $(".nav li").removeClass("active");
+            $('#home').removeClass('active');
+            $('#contactUs').addClass('active');
+            $(function() {
+                setTimeout(function() {
+                    $("#mgs").hide('blind', {}, 500);
+                }, 5000);
+            });
+        });
+
+        $("#MobileNo").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+           
+    </script>
+}

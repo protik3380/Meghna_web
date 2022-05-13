@@ -1,0 +1,249 @@
+﻿@using EFreshStore.Models.ViewModels;
+@model ProductUnitVm
+@{
+    ViewBag.Title = "AddDetails";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css" />
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        .ui-datepicker-header {
+            color: #3e9aba !important;
+            background-image: none !important;
+            border-radius: 0;
+        }
+        #dropdown {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border: none;
+            background-color: #f1f1f1;
+            background-color: #d2d8e0;
+        }
+
+
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-horizontal" id="div1">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "productDetailsform", @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <h2>Add Product Details</h2>
+                    <hr />
+                    @Html.ValidationSummary(true)
+                    <h4 class="text-center">@ViewBag.message</h4>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProductId, "Product Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+
+                            @Html.DropDownListFor(c=>c.ProductId,new SelectList(ViewBag.product, "Id","Name"),"---Select---", new { @id="dropdown" })
+                            @Html.ValidationMessageFor(model => model.ProductId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StockKeepingUnit, "Stock Keeping Unit", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.StockKeepingUnit, new { placeholder = "Enter produt Stock Keeping Unit" })
+                            @Html.ValidationMessageFor(model => model.StockKeepingUnit)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CartonSize, "Carton Size", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.CartonSize,  new { placeholder = "Enter carton size"})
+                            @Html.ValidationMessageFor(model => model.CartonSize)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DistributorPricePerCarton, "Distributor Price Per Carton", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.DistributorPricePerCarton,  new { placeholder = "Enter Distributor Price Per Carton" })
+                            @Html.ValidationMessageFor(model => model.DistributorPricePerCarton)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TradePricePerCarton, "Trade Price Per Carton", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.TradePricePerCarton,  new { placeholder = "Enter Trade Price Per Carton" })
+                            @Html.ValidationMessageFor(model => model.TradePricePerCarton)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MaximumRetailPrice, "Maximum retail price", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.MaximumRetailPrice, new { placeholder = "Enter maximum retail price" })
+                            @Html.ValidationMessageFor(model => model.MaximumRetailPrice)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EffectiveDate, "Effective Date", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.EffectiveDate, new { placeholder = "Enter effective date", @readonly = "readonly", @class = "ui-datepicker-header " })
+                            @Html.ValidationMessageFor(model => model.EffectiveDate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("ImageLoactoin", "Image Location", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-5">
+                            @*@Html.TextBoxFor(c=>c.ProductImages[0]., new { @type="file"})*@
+                            <input type="file"  name="ProductImages[0].ImageLocation" id="ProductImages[0].ImageLocation" class="form-control UploadFile" />
+                            <input type="file" name="ProductImages[1].ImageLocation" id="ProductImages[1].ImageLocation" class="form-control UploadFile" />
+                            <input type="file" name="ProductImages[2].ImageLocation" id="ProductImages[2].ImageLocation" class="form-control UploadFile" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-4 col-md-8">
+                            <input type="submit" id="saveButton" value="Create" class="btn btn-default" />
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @section scripts{
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+        <script type="text/javascript">
+
+            $(".UploadFile").change(function () {
+                if (this.files[0].size > 2097152) {
+                    alert("File is too big!");
+                    this.value = "";
+                };
+            });
+            $(document).ready(function () {
+
+                //$("#EffectiveDate").datepicker();
+                $('#EffectiveDate').datepicker({
+
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "d MM, yy",
+                    showAnim: "slide"
+
+                });
+
+                $("#productDetailsform").validate({
+                    rules: {
+                        ProductId: "required",
+                        StockKeepingUnit: "required",
+                        CartonSize: "required",
+                        DistributorPricePerCarton: {
+                            required: true,
+                            min: 0
+                        },
+                        TradePricePerCarton: {
+                            required: true,
+                            min: 0
+                        },
+                        MaximumRetailPrice: {
+                            required: true,
+                            min: 0
+                        }
+                    },
+                    EffectiveDate:"required",
+                    messages: {
+                        ProductId: "Please enter product name",
+                        StockKeepingUnit: "Please enter stock keeping unit",
+                        CartonSize: "Please enter carton size",
+                        DistributorPricePerCarton: {
+                            required: "Please enter distributor price per carton",
+                            min: ""
+                        },
+                        TradePricePerCarton: {
+                            required: "Please enter trade price per carton",
+                            min: ""
+                        },
+                        MaximumRetailPrice: {
+                            required: "Please enter maximum retail price",
+                            min: ""
+                        }
+                    },
+                    EffectiveDate:"Please enter effective date"
+                });
+
+                //$("#saveButton").click(function () {
+                //    var productId = $("#ProductId").val();
+                //    var stockKeepingUnit = $("#StockKeepingUnit").val();
+                //    var cartonSize = $("#CartonSize").val();
+                //    var distributorPricePerCarton = $("#DistributorPricePerCarton").val();
+                //    var tradePricePerCarton = $("#TradePricePerCarton").val();
+                //    var maximumRetailPrice = $("#MaximumRetailPrice").val();
+                //    var ProductUnitVm = {};
+                //    var Images = [];
+                //    ProductUnitVm.ProductId = productId;
+                //    ProductUnitVm.StockKeepingUnit = stockKeepingUnit;
+                //    ProductUnitVm.CartonSize = cartonSize;
+                //    ProductUnitVm.DistributorPricePerCarton = distributorPricePerCarton;
+                //    ProductUnitVm.TradePricePerCarton = tradePricePerCarton;
+                //    ProductUnitVm.MaximumRetailPrice = maximumRetailPrice;
+
+                //    var imageLocation1 = $("#ImageLocation1").get();
+                //    var imageLocation2 = $("#ImageLocation2").get();
+                //    var imageLocation3 = $("#ImageLocation3").get();
+                //    Images[0].ImageLocation = imageLocation1;
+                //    //var Images = [
+                //    //    { ImageLocation: imageLocation1 },
+                //    //    { ImageLocation: imageLocation2 },
+                //    //    { ImageLocation: imageLocation3 }
+                //    //];
+
+                //    ProductUnitVm.ProductImages = Images;
+                //    var data=$('#productDetailsform').serialize();
+                //    $.ajax({
+                //        type: "POST",
+                //        url: 'http://localhost:50644/api/products/AddDetails',                       
+                //        contentType: "application/json; charset=utf-8",
+                //        dataType: "json",
+                //        crossDomain: true,
+                //        data: JSON.stringify(ProductUnitVm),
+                //        success: function (data) {
+                //            alert(data);
+                            
+                //        }
+
+                //    });
+                //});
+
+                //var images = [];
+                //var image = {};
+                //var i = 0;
+                
+                //$("#btnAdd").click(function () {
+                //    //image.Id = i++;
+                //    image.ImageLocation = $("#ImageLocation").get(0);
+                //    alert(image.ImageLocation);
+                //    var table = "<tr><td><input hidden='hidden' name='ProductImages[" + i + "].Id' type='text'  value=" + i + " />" + i + "</td><td><input hidden='hidden' type='file'name='ProductImages[" + i + "].ImageLocation'  value=" + image.ImageLocation + " />" + image.ImageLocation + "</td></tr>";
+                //    for (var j = 0; j < images.length; j++) {
+                //        if (images[j].ImageLocation === image.ImageLocation) {
+                //            alert("this product is already exsit");
+                //            return;
+                //        }
+                //    }
+                //    $("#tblImage").append(table);
+                //    i++;
+                //    images.push(image);
+                //});
+            });
+        </script>
+    }
+</body>
+</html>

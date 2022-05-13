@@ -1,0 +1,190 @@
+﻿@using EFreshStore.Models.Enum
+@using EFreshStore.Models.ViewModels
+@using EFreshStore.Utility
+@{
+    ViewBag.Title = "Track Order";
+    Layout = "~/Views/Shared/_Master.cshtml";
+    var order = (TrackOrderVm)ViewBag.Orders;
+    var data = (string)ViewBag.TextBoxValue;
+    var imageUrl = "Content/img/DeliveryMan/no-image.png";
+}
+<style>
+    #DeliveryManInfo {
+        text-align: center; 
+        width: 30%; 
+        border: 1px #eaeaea solid;
+       margin: auto;
+       	padding: 15px;
+        min-width: 300px;
+    }
+    #DeliveryManInfo h4 {
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+</style>
+<section class="container" style="margin-top: 20px">
+    <h1 style="text-align: center">Track Your Order</h1>
+</section>
+<div class="container">
+    <div class="page-content">
+        <div class="account-login">
+            <div class="box-authentication row" style="width: 70%">
+                @using (Html.BeginForm("TrackOrder", "Home", FormMethod.Get, new { id = "trackOrderForm" }))
+                {
+                    <div class="col col-md-2">
+                        <p style="padding: 15px 0;"> Order No<span class="required">*</span></p>
+                    </div>
+                    <div class="col col-md-8">
+                        <input id="orderNo" name="orderNo" type="text" class="form-control" value="@data" placeholder="Enter Order No">
+                    </div>
+                    <div class="col col-md-2">
+                        <button class="button"><span>&nbsp; Show &nbsp;</span></button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@if (order != null)
+{
+    if (order.OrderNo != null)
+    {
+        <div style="margin-top: 20px;">
+            <h1 class="text-center">Order # @order.OrderNo </h1>
+            <h4 class="text-center">Order Date :
+                @if (order.OrderDate != null)
+                {
+                    @order.OrderDate.Value.ToString("dd-MMM-yyyy hh:mm tt")
+                }
+            </h4>
+            @if (order.DeliveryManName != null)
+            {
+                <div id="DeliveryManInfo" class="row" style="vertical-align: middle">
+
+                    <h4>Delivery Man Information</h4>
+                    @if (!string.IsNullOrEmpty(order.DeliveryManImageUrl))
+                    {
+                        <div class="col-md-3" style="vertical-align: middle; padding: 0">
+                            <a><img src="@BaseUrl.baseUrl\@order.DeliveryManImageUrl" alt="delivery-man"></a>
+                        </div>
+                        imageUrl = order.DeliveryManImageUrl;
+                    }
+
+                    <div style="padding: 0">
+                        <h5><a data-toggle="modal" data-target="#modalCart" onclick="GetDeliveryManInfo('@order.DeliveryManName', '@order.DeliveryManEmail', '@order.DeliveryManMobile','@imageUrl')" style="cursor: pointer">@order.DeliveryManName</a></h5>
+                        <h5>@order.DeliveryManMobile</h5>
+                        <h5>@order.DeliveryManEmail</h5>
+                    </div>
+                
+                </div>
+            }
+           
+            <hr />
+            <div class="tabbable container">
+                @if (order.CurrentOrderStateId == (long) OrderStatusEnum.Rejected)
+                {
+                    <h4 class="text-center" style="color: red">Sorry !! This order has been rejected.</h4>                                    
+                }
+                
+                <ul class="nav nav-tabs wizard">
+                    <li id="Pending">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">1</span>Pending</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.Pending)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                    <li id="Confirm">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">2</span>Confirmed</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.Confirm)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                    <li id="OnProcessing">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">3</span>On Processing</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.OnProcessing)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                    <li id="Shipped">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="false"><span class="nmbr">4</span>Shipped</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.Shipped)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                    <li id="Delivering">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="true"><span class="nmbr">5</span>Delivered</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.Delivered)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                    <li id="Received">
+                        <a style="pointer-events: none; cursor: default;" data-toggle="tab" aria-expanded="true"><span class="nmbr">6</span>Received</a>
+                        @foreach (var item in order.OrderHistories)
+                        {
+                            if (item.OrderStateId == (long) OrderStatusEnum.Received)
+                            {
+                                @item.OrderStateChangedOn.ToString("dd-MMM-yyyy hh:mm tt")
+                            }
+                        }
+                    </li>
+                </ul>
+            </div>
+            <hr />
+        </div>
+    }
+    else
+    {
+        <div>
+            <h3 class="text-center" style="color: red">Oder not found</h3>
+            <hr />
+        </div>
+    }
+
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            
+            $('li').removeClass("active");
+            $(@Session["OrderPass"].ToString()).addClass('completed');
+            $(@Session["OrderPass"].ToString()).prevAll().addClass("completed");
+            $(@Session["OrderPass"].ToString()).nextAll().removeClass("completed");
+
+            $(".nav li").removeClass("active");
+            $('#home').removeClass('active');
+            $('#trackOrder').addClass('active');
+
+        });
+        $("#trackOrderForm").validate({
+            rules: {
+                orderNo: "required"
+            },
+            messages: {
+                orderNo: "Please enter Order No."
+            }
+        });
+    </script>
+}

@@ -1,0 +1,196 @@
+﻿@using System.Data;
+@using System.Web.Mvc.Html
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model EFreshStore.Models.Context.CorporateUser
+
+@{
+    ViewBag.Title = "Add Bulk User";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        /* Generic Styling, for Desktops/Laptops */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        /* Zebra striping */
+        tr:nth-of-type(odd) {
+            background: #eee;
+        }
+
+        th {
+            background: #333;
+            color: white;
+            font-weight: bold;
+        }
+
+        td, th {
+            padding: 6px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        td, tr {
+            text-align: left;
+            color: black;
+        }
+
+        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+                /* Hide table headers (but not display: none;, for accessibility) */
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+            tr {
+                border: 1px solid #ccc;
+            }
+
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+
+                /*
+        Label the data
+        */
+                td:before {
+                    content: attr(data-title);
+                }
+        }
+
+        select {
+            width: 80%;
+            padding: 10px 15px;
+            margin-left: 80%;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+        }
+
+        input[type=submit] {
+            width: 25%;
+            padding: 10px;
+            color: white;
+            display: inline-block;
+            border: none;
+            background: #ffa726;
+        }
+
+            input[type=submit]:hover {
+                background-color: rgb(60, 125, 201);
+            }
+
+        .content {
+            margin-bottom: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    @using (Html.BeginForm("AddBulkUser", "Contract", FormMethod.Post, new {enctype = "multipart/form-data", id = "addBulkUserform"}))
+    {
+        <div class="container">
+            <div>
+                <h2 style="margin-left: 40%">Add Bulk User</h2>
+                @Html.RenderFlashMessages()
+                <hr/>
+                <div class="col-md-5">
+                    @Html.DropDownListFor(x => x.CorporateContractId, new SelectList(ViewBag.Contracts, "Id", "CompanyName"), "Select company")
+                    @Html.ValidationMessageFor(model => model.CorporateContractId)
+                </div>
+            </div>
+
+            <table>
+                <tr><td>.xlsx/.xls/.csv</td><td><input type="file" id="ecxelFile" name="ecxelFile"/></td></tr>
+                <tr><td></td><td><input type="submit" id="Submit" name="Submit" value="Upload"/></td></tr>
+            </table>
+        </div>
+        <br/>
+    }
+    @if (ViewBag.SavedUser != null)
+    {
+        <div class="container">
+            <table>
+                @if (ViewBag.Count >= 1)
+                {
+                    List<CorporateUser> corporateUsers = ViewBag.SavedUser;
+                    <thead>
+                    <tr>
+                        <td>EMPLOYEE NAME</td>
+                        <td>MOBILE NO</td>
+                        <td>EMAIL</td>
+                        <td>DESIGNATION</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var employee in corporateUsers)
+                    {
+                        <tr>
+                            <td>@employee.Name</td>
+                            <td>@employee.MobileNo</td>
+                            <td>@employee.Email</td>
+                            <td>@employee.Designation</td>
+                        </tr>
+                    }
+                    </tbody>
+                }
+                else
+                {
+                    <tr>
+                        <td style="color: red;">
+                            Sorry! No data inserted.
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#addBulkUserform").validate({
+                rules: {
+                    CorporateContractId: "required",
+                    ecxelFile: "required"
+
+                },
+                messages: {
+                    CorporateContractId: "Please select company",
+                    ecxelFile: "Please upload a file"
+                }
+            });
+        });
+    </script>
+}
+</body>
+</html>

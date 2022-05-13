@@ -1,0 +1,121 @@
+﻿@using System.Web.Mvc.Html
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model EFreshStore.Models.Context.Distributor
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css" />
+</head>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "AddDistributorForm"}))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h2>Add Distributor</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, "Name", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Name, new { placeholder = "Enter name" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address, "Address", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Address, new { placeholder = "Enter address" })
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ContactPerson, "Contact Person", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.ContactPerson, new { placeholder = "Enter contact person" })
+                        @Html.ValidationMessageFor(model => model.ContactPerson)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, "Phone", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Phone, new { placeholder = "Enter phone number" })
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Email, new { placeholder = "Enter email" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MasterDepotId, "Master Depot", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.MasterDepotId, new SelectList(ViewBag.masterDepot, "Id", "Name"), "---Select---", new {@id = ""})
+                        @Html.ValidationMessageFor(model => model.MasterDepotId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThanaId, "Thana", htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.ThanaId, new SelectList(ViewBag.thana, "Id", "Name"), "---Select---", new { @id = "" })
+                        @Html.ValidationMessageFor(model => model.ThanaId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="Create" class="btn btn-default"/>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/jquery-3.0.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script>
+            $(document).ready(function() {
+                $("#AddDistributorForm").validate({
+                    rules: {
+                        Name: "required",
+                        Address: "required",
+                        ContactPerson: "required",
+                        Phone :"required",
+                        Email:"required",
+                        MasterDepotId:"required",
+                        ThanaId: "required"
+                    },
+                    messages: {
+                        Name: "Please insert company name",
+                        Address: "Please insert address",
+                        ContactPerson: "Please insert contact person",
+                        Phone: "Please insert phone",
+                        Email:"Please insert email",
+                        MasterDepotId: "Please select master depot",
+                        ThanaId: "Please select thana"
+
+                    }
+                });
+                });
+</script>
+}

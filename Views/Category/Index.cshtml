@@ -1,0 +1,55 @@
+﻿@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Vereyon.Web
+@model IEnumerable<EFreshStore.Models.Context.Category>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+    List<Category> categories = ViewBag.Categories;
+
+}
+
+<div class="chart-area">
+    <div class="container">
+        @Html.RenderFlashMessages()
+        <h2>Category Details</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-item table-responsive fix">
+                    <form>
+                        <fieldset id="text">
+                            <table class="col-md-12" id="tblCartProduct">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var category in categories)
+                                        {
+                                            <tr>
+                                                <td>@category.Name</td>
+                                                <td>@category.Description</td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "Edit", new {id = category.Id}, htmlAttributes: new {@style = "color: red"})
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

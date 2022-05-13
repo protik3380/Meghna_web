@@ -1,0 +1,161 @@
+﻿@using System.Web.Mvc.Html
+@using System.Web.UI.WebControls
+@*@using EFreshStore.Interfaces.Managers
+@using EFreshStore.Managers*@
+@using EFreshStore.Models
+@using EFreshStore.Models.Context
+@using Microsoft.Ajax.Utilities
+@using Vereyon.Web
+@model EFreshStore.Models.Context.CorporateUser
+@{
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/form-design.css" />
+</head>
+<body>
+<div class="container">
+    <div class="form-horizontal" id="div1">
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "addUserForm"}))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h2>Add New User</h2>
+                <hr/>
+                @Html.ValidationSummary(true)
+                @Html.RenderFlashMessages()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CorporateContractId, "Company : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(x => x.CorporateContractId, new SelectList(ViewBag.Contracts, "Id", "CompanyName"), "Select company")
+
+                        @Html.ValidationMessageFor(model => model.CorporateContractId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmployeeId, "Employee Id : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.EmployeeId, new {placeholder = "Enter employee Id"})
+                        @Html.ValidationMessageFor(model => model.EmployeeId)
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, "Name : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Name, new {placeholder = "Enter name"})
+                        @Html.ValidationMessageFor(model => model.Name)
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MobileNo, "Mobile No : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.MobileNo, new {placeholder = "Enter mobile no."})
+                        @Html.ValidationMessageFor(model => model.MobileNo)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, "Email : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Email, new {placeholder = "Enter email"})
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Designation, "Designation : ", htmlAttributes: new {@class = "control-label col-md-3"})
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.Designation, new {placeholder = "Enter designation"})
+                        @Html.ValidationMessageFor(model => model.Designation)
+                    </div>
+                </div>
+
+
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.Password, "Password : ", htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(model => model.Password, new { placeholder = "Enter password" })
+                        </div>*@
+                @*</div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password, "Confirm Password", htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            <input id="confirm_password" type="password" required="fill this field" placeholder="Re-enter password">
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" id="submit" value="Add" class="btn btn-default"/>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#addUserForm").validate({
+                rules: {
+                    Name: "required",
+                    CorporateContractId: "required",
+                    EmployeeId: "required",
+                    MobileNo: "required",
+                    Email: {
+                        required: true,
+                        email: true
+                    },
+                    Designation: "required"
+                },
+                messages: {
+                    Name: "Please enter name",
+                    CorporateContractId: "Please select a company",
+                    EmployeeId: "Please enter an employee id",
+                    MobileNo: "Please enter a mobile no",
+                    Email: {
+                        required: "Please enter a email",
+                        email: "Please enter a valid email"
+                    },
+                    Designation: "Please add a designation"
+                }
+            });
+        });
+
+        var password = document.getElementById("Password"), confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword() {
+            if (password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+}
+</body>
+</html>
+
+
+

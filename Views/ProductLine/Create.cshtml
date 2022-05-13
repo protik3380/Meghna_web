@@ -1,0 +1,130 @@
+﻿@using Vereyon.Web
+@using EFreshStore.Models.Context;
+@model ProductLine
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_CommonMaster.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .ui-datepicker-header {
+            color: #3e9aba !important;
+            background-image: none !important;
+            border-radius: 0;
+        }
+
+        #div1 {
+            width: 750px;
+            height: 550px;
+            padding: 50px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #Description, input[type=text] {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border: none;
+            background-color: #f1f1f1;
+            /*background-color: #d2d8e0;*/
+        }
+
+        #Validity {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border: none;
+            background-color: #f1f1f1;
+            /*background-color: #d2d8e0;*/
+        }
+
+
+        input[type=submit] {
+            width: 60%;
+            padding: 15px;
+            color: white;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #ffa726;
+        }
+
+            input[type=submit]:hover {
+                background-color: rgb(60, 125, 201);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-horizontal" id="div1">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "productLineform" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <h2>Add Product Line</h2>
+                    <hr />
+                    @Html.ValidationSummary(true)
+                    @Html.RenderFlashMessages()
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, "Product Line Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.Name, new { placeholder = "Enter Product Line Name" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Description, new { placeholder = "Enter category description" })
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-4 col-md-8">
+                            <input type="submit" id="submit" value="Create" class="btn btn-default" />
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div style="margin-left: 50px; color: red">
+                @Html.ActionLink("Back to List", "Index", "", htmlAttributes: new { @style = "color: red" })
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script>
+        $(document).ready(function () {
+            $("#productLineform").validate({
+                rules: {
+                    Name: "required",
+                    Description: "required"
+
+                },
+                messages: {
+                    Name: "Please enter product line name",
+                    Description: "Please enter descriptions"
+                }
+            });
+        });
+        </script>
+    }
+</body>
+</html>
+
